@@ -1,0 +1,48 @@
+{
+  "release": "8.0.0-phase3",
+  "created_at": "2026-10-10T11:01:01.235526+00:00",
+  "previous_release": "8.0.0-phase2",
+  "status": "locally_validated_development_release",
+  "python_tests": {
+    "passed": 108,
+    "failed": 0,
+    "command": "python -m pytest -q"
+  },
+  "python_compileall": true,
+  "javascript_node_syntax": true,
+  "chromium_dom_smoke": {
+    "passed": true,
+    "mode": "Chromium headless + FastAPI TestClient fetch bridge",
+    "api_requests": 40,
+    "non_successful_api_requests": 0,
+    "ui_areas": [
+      "Ontology 2.0",
+      "draft editing",
+      "Trust Engine",
+      "SME Review",
+      "Conceptual graph",
+      "Logical graph",
+      "Evidence graph",
+      "Dependency graph"
+    ],
+    "direct_http_navigation": "blocked_by_build_sandbox_policy"
+  },
+  "phase3_functionality": [
+    "typed_ontology_six_kinds",
+    "scope_binding_checks",
+    "provenance_evidence_snapshots",
+    "optimistic_versions",
+    "independent_certification",
+    "fail_closed_compiler",
+    "cross_asset_approved_join_check",
+    "sme_question_rulings",
+    "four_graph_modes",
+    "immutable_release_digests"
+  ],
+  "not_verified": [
+    "native_Windows_EC2_PowerShell_execution",
+    "live_AWS_IAM_Glue_Athena_Bedrock",
+    "live_PostgreSQL_Snowflake_Databricks",
+    "Phase4_query_engine_semantic_integration"
+  ]
+}

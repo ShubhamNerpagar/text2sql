@@ -1,0 +1,3 @@
+data_sources:
+  default: athena
+  supported: [athena, postgres, snowflake, databricks]

@@ -1,0 +1,19 @@
+{
+  "version": "8.2.0",
+  "status": "locally_tested_development_release",
+  "automated_test_result": "147 passed",
+  "javascript_syntax": "node --check passed",
+  "python_compilation": "compileall passed",
+  "browser_smoke": {
+    "method": "Chromium with Python-backed API fetch bridge due network navigation policy",
+    "result": "passed",
+    "api_calls_successful": 20,
+    "api_calls_failed": 0,
+    "page_exceptions": 0,
+    "advanced_workflow": "Load example -> validated preview -> offline execution -> 3 grouped result rows"
+  },
+  "complex_analytics": {
+    "tested": ["two_table_aggregate", "four_table_multi_hop_join", "grouping", "where_in", "having", "ordering", "result_limit", "unsafe_sql_rejection", "uncertified_column_rejection", "unapproved_relation_rejection", "stale_contract_rejection", "bedrock_response_mock"],
+    "unverified": ["live_bedrock_converse", "real_warehouse_execution", "windows_ec2", "customer_security_acceptance", "load_testing_on_real_warehouses"]
+  }
+}

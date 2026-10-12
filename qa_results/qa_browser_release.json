@@ -1,0 +1,539 @@
+{
+  "count": 41,
+  "passed": 40,
+  "external_warning": 1,
+  "failed": 0,
+  "page_results": [
+    {
+      "section": "ask",
+      "tab": null,
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "\u2726\nAsk your data\n\nUse natural language. I\u2019ll resolve business meaning first, then choose the safest e"
+    },
+    {
+      "section": "home",
+      "tab": null,
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Good to see you\n\nAsk questions, explore governed data, or review semantic health.\n\nAI ANALYTICS\nWhat"
+    },
+    {
+      "section": "reports",
+      "tab": "dashboards",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Reports\n\nGoverned BI dashboards refresh through the same semantic, security and query-routing engine"
+    },
+    {
+      "section": "reports",
+      "tab": "lineage",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Report lineage\n\nSee which governed metrics, dimensions and physical tables power each dashboard.\n\nNo"
+    },
+    {
+      "section": "data",
+      "tab": "estate",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Enterprise catalog & scopes\n\nSelect only the data that a workspace should see. Pages load on demand;"
+    },
+    {
+      "section": "data",
+      "tab": "catalog",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Datasets\n\nSelect a dataset to inspect its metadata, descriptor, profile, sample, transformation, SQL"
+    },
+    {
+      "section": "data",
+      "tab": "profile",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Data Profiling\n\nInspect metadata and run measured aggregate diagnostics for the exact selected sourc"
+    },
+    {
+      "section": "data",
+      "tab": "contracts",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Dataset Contracts\n\nReview column roles, owners and quality expectations before certifying a physical"
+    },
+    {
+      "section": "data",
+      "tab": "evidence",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Relationship Evidence\n\nOnly relationships supported by real aggregate coverage and target-key unique"
+    },
+    {
+      "section": "data",
+      "tab": "quality",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Quality Center\n\nSet expectations, measure quality, issue steward rulings, and track remediation.\n\nRu"
+    },
+    {
+      "section": "data",
+      "tab": "pipeline",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Lineage Studio\n\nVisual trace from physical sources through profiles, contracts, declared transformat"
+    },
+    {
+      "section": "data",
+      "tab": "sources",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Data sources\n\nOne semantic control plane across supported warehouses.\n\nCO\nOffline Retail Demo (illus"
+    },
+    {
+      "section": "semantics",
+      "tab": "model",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Semantic model\n\nBusiness objects map to governed physical data.\n\nEntities\n5\nDimensions\n25\nMetrics\n18"
+    },
+    {
+      "section": "semantics",
+      "tab": "ontology",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Ontology 2.0 \u00b7 Object Studio\n\nCreate and steward entities, events, measures, code sets, business con"
+    },
+    {
+      "section": "semantics",
+      "tab": "trust",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Semantic Trust Engine\n\nCompile physical grounding, identify missing evidence and publish review-only"
+    },
+    {
+      "section": "semantics",
+      "tab": "questions",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "SME Review Queue\n\nTurn missing evidence and ambiguous business definitions into traceable decisions;"
+    },
+    {
+      "section": "semantics",
+      "tab": "ontology-graph",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Ontology Graph Explorer\n\nSwitch between four genuine semantic projections: business concepts, physic"
+    },
+    {
+      "section": "semantics",
+      "tab": "governed-ask",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Governed Ask + BI\n\nOntology-backed, evidence-cited, release-pinned query planning. Legacy Ask and BI"
+    },
+    {
+      "section": "semantics",
+      "tab": "plan-lab",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Semantic Plan Lab\n\nOntology-backed, evidence-cited, release-pinned query planning. Legacy Ask and BI"
+    },
+    {
+      "section": "semantics",
+      "tab": "golden",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Golden / Fuzz / Mutation Lab\n\nOntology-backed, evidence-cited, release-pinned query planning. Legacy"
+    },
+    {
+      "section": "semantics",
+      "tab": "ontology-releases",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Ontology Release Manager\n\nOntology-backed, evidence-cited, release-pinned query planning. Legacy Ask"
+    },
+    {
+      "section": "semantics",
+      "tab": "impact-agent",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Impact & Agent Tools\n\nOntology-backed, evidence-cited, release-pinned query planning. Legacy Ask and"
+    },
+    {
+      "section": "semantics",
+      "tab": "studio",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Semantic Studio\n\nReview, edit, validate, certify and publish business semantics generated from sourc"
+    },
+    {
+      "section": "semantics",
+      "tab": "graph",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Graph intelligence\n\nObsidian-style force graph for your generated semantic model. Drag nodes, pan/zo"
+    },
+    {
+      "section": "semantics",
+      "tab": "relationships",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Relationships\n\nOnly data-validated, verified or certified relationships can drive production joins.\n"
+    },
+    {
+      "section": "semantics",
+      "tab": "governance",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Governance\n\nReview inferred knowledge before it becomes authoritative.\n\nOpen items\n56\nHigh priority\n"
+    },
+    {
+      "section": "semantics",
+      "tab": "branches",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Branches\n\nDevelop, compare, validate and merge semantic changes without modifying packaged YAML.\n\nNe"
+    },
+    {
+      "section": "operate",
+      "tab": "job-center",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Scale & Operate\n\nDurable job control, explicit workspace federation, permission-filtered discovery, "
+    },
+    {
+      "section": "operate",
+      "tab": "federation",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Scale & Operate\n\nDurable job control, explicit workspace federation, permission-filtered discovery, "
+    },
+    {
+      "section": "operate",
+      "tab": "enterprise-search",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Scale & Operate\n\nDurable job control, explicit workspace federation, permission-filtered discovery, "
+    },
+    {
+      "section": "operate",
+      "tab": "connector-bench",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Scale & Operate\n\nDurable job control, explicit workspace federation, permission-filtered discovery, "
+    },
+    {
+      "section": "operate",
+      "tab": "readiness",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Scale & Operate\n\nDurable job control, explicit workspace federation, permission-filtered discovery, "
+    },
+    {
+      "section": "monitor",
+      "tab": "overview",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Monitor\n\nQuality, usage, security and cost in one place.\n\nQueries\n0\n0 successful\nP95 latency\n\u2014\nrecen"
+    },
+    {
+      "section": "monitor",
+      "tab": "evaluation",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Evaluation\n\nRegression and adversarial suites remain isolated from runtime verified-query context.\n\n"
+    },
+    {
+      "section": "monitor",
+      "tab": "queries",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Query history\n\nSee semantic route, confidence, execution and feedback.\n\nQuestion\tRoute\tStatus\tMetric"
+    },
+    {
+      "section": "monitor",
+      "tab": "audit",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Audit\n\nImmutable-style control-plane events for queries, security, actions and semantic changes.\n\nEv"
+    },
+    {
+      "section": "admin",
+      "tab": "onboarding",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Onboarding\n\nRefresh metadata and review generated semantics. Sample rows remain disabled.\n\nDiscover "
+    },
+    {
+      "section": "admin",
+      "tab": "ai-models",
+      "result": "pass_with_external_warning",
+      "loading": "loaded",
+      "ui_errors": [
+        "A listed model does not prove invocation permission. Probe a model before use. Foundation-model listing failed: Unable to locate credentials Inference-profile listing failed: Unable to locate credentials"
+      ],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Bedrock model routing\n\nDiscover permitted Amazon Bedrock resources, probe actual invoke permission a"
+    },
+    {
+      "section": "admin",
+      "tab": "actions",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Actions\n\nGoverned writeback. No arbitrary database writes.\n\nACTION\nCreate data review\n\nRecord a gove"
+    },
+    {
+      "section": "admin",
+      "tab": "tools",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Agent tools\n\nPermission-aware MCP tools expose governed semantics without arbitrary SQL or arbitrary"
+    },
+    {
+      "section": "admin",
+      "tab": "settings",
+      "result": "pass",
+      "loading": "loaded",
+      "ui_errors": [],
+      "api_5xx": [],
+      "page_errors": [],
+      "stage_word_visible": false,
+      "preview": "Settings\n\nRuntime, identity, connectors and deployment readiness.\n\nRuntime\nLOCAL\nVersion\n8.1.0\nWorks"
+    }
+  ],
+  "flows": [
+    {
+      "flow": "profiling",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "contract_certification",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "quality_create_and_run",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "relationship_measurement",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "ontology_candidate_generation",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "ontology_graph_modes",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "job_enqueue_worker_execute",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "enterprise_search",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "global_search_result_navigation",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "group_expansion",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    },
+    {
+      "flow": "collapse_expand",
+      "result": "pass",
+      "api_failures": [],
+      "errors": []
+    }
+  ],
+  "javascript_errors": [],
+  "console_errors": [],
+  "requests": 231,
+  "status_counts": {
+    "200": 231
+  },
+  "mobile": {
+    "horizontal_overflow": false,
+    "nav_visible": true
+  }
+}

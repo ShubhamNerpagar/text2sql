@@ -1,0 +1,22 @@
+{
+  "package": "data-intelligence-platform-8.0.0-phase5-windows-native",
+  "release": "8.0.0-phase5",
+  "status": "locally_validated_development_release_candidate",
+  "inheritance": "Phase 1, Phase 2, Phase 3, Phase 4 preserved",
+  "checks": {
+    "python_automated": {"passed": 125, "failed": 0, "scope": "inherited + Phase 5 + mocked DynamoDB CAS"},
+    "javascript_syntax": "passed",
+    "python_compileall": "passed",
+    "phase5_browser_bridge": {"api_requests": 28, "failed_requests": 0, "javascript_errors": 0,
+      "screens": ["Job Center", "Queued Job", "Enterprise Search", "Federation", "Readiness"]},
+    "worker_replay": {"phase5_job_type": "search_snapshot", "outcome": "succeeded"},
+    "offline_connector_conformance": {"table": "Orders", "row_count": 10000, "pass": true},
+    "bounded_load_smoke": {"http_requests": 120, "http_success": 120, "http_errors": 0,
+      "scope": "single local Uvicorn /api/health only, not production capacity"},
+    "dynamodb": "simulated conditional write testing passed; no live AWS validation",
+    "windows_ec2_native": "not_tested",
+    "live_warehouse_equivalence": "not_tested",
+    "multi_host_worker_failover": "not_tested",
+    "production_acceptance": false
+  }
+}

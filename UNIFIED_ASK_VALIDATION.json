@@ -1,0 +1,18 @@
+{
+  "version": "8.3.0",
+  "test_count": 152,
+  "test_passed": 152,
+  "browser_questions_passed": 4,
+  "browser_expected_refusals": 1,
+  "browser_requests_total": 19,
+  "browser_expected_http_400": 1,
+  "browser_js_errors": 0,
+  "live_bedrock_tested": false,
+  "live_warehouse_execution_tested": false,
+  "limitations": [
+    "No durable unified conversations",
+    "No unified report-widget integration",
+    "External execution remains preview-only",
+    "Real Windows EC2 and production identity acceptance pending"
+  ]
+}

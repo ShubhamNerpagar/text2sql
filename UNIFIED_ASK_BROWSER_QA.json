@@ -1,0 +1,15 @@
+{
+  "workspace": "advanced-89bd5fc61",
+  "release_id": "p3-complex-v1",
+  "screens": [],
+  "count_questions": 4,
+  "refused_unsafe_or_unsupported": 1,
+  "requests": 19,
+  "exceptions": [],
+  "http_failures": [
+    {
+      "path": "/api/phase4/unified/ask?workspace=advanced-89bd5fc61",
+      "status": 400
+    }
+  ]
+}

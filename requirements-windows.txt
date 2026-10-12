@@ -1,0 +1,2 @@
+# Windows-native runtime dependencies for Data Intelligence Platform 8.4.0
+-r requirements.txt

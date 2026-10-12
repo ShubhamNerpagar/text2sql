@@ -1,0 +1,1 @@
+Windows-native enterprise platform 8.3.0 — certified multi-table analytics, Bedrock structured planning (production connector validation pending)

@@ -1,0 +1,4 @@
+calendar:
+  type: calendar_year
+  week_starts_on: monday
+  default_time_grain: month

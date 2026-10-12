@@ -1,0 +1,55 @@
+{
+  "release": "8.0.0-phase4",
+  "validation_timestamp_utc": "2026-10-10T11:20:14.597136+00:00",
+  "status": "locally_validated_development_release",
+  "automated_tests": {
+    "command": "python -m pytest -q",
+    "passed": 116,
+    "failed": 0
+  },
+  "syntax": {
+    "python_compileall": true,
+    "node_check": true
+  },
+  "chromium_ui_bridge": {
+    "passed": true,
+    "backend": "FastAPI TestClient bridge in Chromium",
+    "api_requests": 60,
+    "api_failures": 0,
+    "javascript_errors": 0,
+    "workspaces": [
+      "Governed Ask + BI",
+      "Plan Lab",
+      "Golden Tests",
+      "Ontology Releases",
+      "Impact + Agents"
+    ],
+    "screenshots": [
+      "validation_screenshots/phase4_governed_ask.png",
+      "validation_screenshots/phase4_golden_tests.png",
+      "validation_screenshots/phase4_release_manager.png"
+    ]
+  },
+  "features": [
+    "release_pinned_semantic_planning",
+    "live_evidence_fail_closed",
+    "deterministic_hierarchical_retrieval",
+    "scoped_offline_contoso_aggregate_only_execution",
+    "kpi_bi_endpoint",
+    "golden_case_fuzz_mutation_checks",
+    "documentation_only_branch_approvals",
+    "immutable_versioned_release_digests",
+    "dependency_impact_analysis",
+    "bounded_agent_tools",
+    "mcp_json_rpc_method_adapter"
+  ],
+  "not_verified": [
+    "native_windows_ec2_execution",
+    "live_aws_iam_bedrock_athena_validation",
+    "postgres_snowflake_databricks_phase4_execution",
+    "production_mcp_streamable_http",
+    "comprehensive_nl_question_accuracy",
+    "concurrent_distributed_atomic_updates",
+    "phase5_scale_federation"
+  ]
+}

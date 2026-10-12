@@ -1,0 +1,19 @@
+{
+  "version": "8.4.0",
+  "status": "passed",
+  "checks": [
+    "Ask executes the approved net-sales formula: 350",
+    "Follow-up uses approved city join and retains completed-sales meaning",
+    "Screen loads: admin/onboarding",
+    "Screen loads: semantics/ontology",
+    "Screen loads: semantics/relationships",
+    "Screen loads: semantics/golden",
+    "Screen loads: semantics/plan-lab",
+    "Screen loads: admin/ai-models",
+    "Missing LLM disables question entry and offers model connection",
+    "Connect AI model navigates to model settings"
+  ],
+  "page_errors": [],
+  "provider": "mocked Bedrock contract; live SQLAlchemy/SQLite fixture",
+  "live_bedrock_tested": false
+}

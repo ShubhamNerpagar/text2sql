@@ -1,0 +1,34 @@
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "logfile": "C:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\Logs\\amazon-cloudwatch-agent.log"
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "C:\\DataIntelligencePlatform\\logs\\app.log",
+            "log_group_name": "/data-intelligence/windows/app",
+            "log_stream_name": "{instance_id}/app"
+          },
+          {
+            "file_path": "C:\\DataIntelligencePlatform\\logs\\app-error.log",
+            "log_group_name": "/data-intelligence/windows/error",
+            "log_stream_name": "{instance_id}/error"
+          }
+        ]
+      }
+    }
+  },
+  "metrics": {
+    "namespace": "DataIntelligence/Windows",
+    "metrics_collected": {
+      "Memory": {"measurement": ["% Committed Bytes In Use"]},
+      "Processor": {"measurement": ["% Processor Time"], "resources": ["*"]}
+    },
+    "append_dimensions": {
+      "InstanceId": "${aws:InstanceId}"
+    }
+  }
+}

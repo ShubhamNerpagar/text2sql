@@ -1,0 +1,8 @@
+{
+  "page_errors": [],
+  "screenshots": 12,
+  "provider": "mocked Bedrock",
+  "data": "SQLite fixture",
+  "live_model_access": false,
+  "report_widgets_created_via": "supported report API"
+}

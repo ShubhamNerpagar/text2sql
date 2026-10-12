@@ -1,0 +1,21 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+state/*.json
+.DS_Store
+logs/*.log
+logs/*.log.1
+*.pid
+
+# Local credentials, generated runtime state, and build caches
+.env.*
+!.env.example
+!.env.*.example
+*.py[cod]
+state/
+logs/
+.aws/
+.venvs/
+.coverage
+htmlcov/

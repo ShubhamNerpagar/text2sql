@@ -1,0 +1,54 @@
+{
+  "product": "Data Intelligence Platform",
+  "version": "8.0.0-phase2",
+  "phase": "Understand Data",
+  "generated_at_utc": "2026-10-10T10:41:06.937826+00:00",
+  "source": "User-supplied 8.0.0-phase1 Windows-native ZIP",
+  "validation": {
+    "pytest": {
+      "passed": 98,
+      "failed": 0,
+      "legacy_regression": 86,
+      "new_phase2": 12,
+      "environment": "Linux Python 3.13 isolated container"
+    },
+    "python_compileall": "pass",
+    "javascript_node_syntax": "pass",
+    "http_backend": {
+      "status": "pass",
+      "features": [
+        "exact scope",
+        "profile metadata/standard/deep",
+        "contracts and versions",
+        "aggregate relationship evidence",
+        "quality rules and rulings",
+        "transformation lineage and impact",
+        "audit permissions"
+      ]
+    },
+    "ui_interaction": {
+      "status": "pass",
+      "browser": "headless Chromium via Playwright",
+      "transport": "Local HTTP bridged to FastAPI because direct browser loopback navigation was blocked",
+      "verified": [
+        "profile 10000 Orders",
+        "contract draft/review/certification",
+        "ER diagram and FK aggregate measurement",
+        "quality rule run and accepted ruling",
+        "registered transformation and lineage impact"
+      ],
+      "javascript_errors": 0
+    },
+    "windows_ec2_runtime": "not_tested_on_windows",
+    "aws_live_athena_glue_bedrock": "not_tested_live",
+    "postgres_snowflake_databricks_live_connectors": "not_tested_live",
+    "production_load_and_hardening": "not_certified"
+  },
+  "boundaries": [
+    "Phase 2 FK approval does not automatically promote into legacy semantic SQL joins; Phase 3 trust integration remains pending.",
+    "Contract freshness SLA is persisted metadata, not a scheduled freshness monitor.",
+    "Lineage transformations are declared rather than execution-verified.",
+    "Aggregate profiling is scoped but can incur warehouse charges and has a 200-column per-run bound.",
+    "Local JSON control store is single-process test architecture; DynamoDB is required for multi-instance persistence."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "version": "8.1.0",
+  "date": "2026-10-10",
+  "release_status": "production_candidate_not_certified",
+  "automated_tests_passed": 141,
+  "automated_tests_failed": 0,
+  "browser_destinations_total": 41,
+  "browser_destinations_passed": 41,
+  "browser_external_warnings": 1,
+  "ui_workflows_passed": 11,
+  "browser_api_requests": 231,
+  "javascript_errors": 0,
+  "production_preflight_rejects_unsafe_config": true,
+  "live_windows_ec2": "not_run",
+  "live_aws_oidc": "not_run",
+  "external_warehouse_equivalence": "not_run",
+  "multi_host_failover": "not_run",
+  "production_signoff": "blocked_pending_environment_acceptance"
+}

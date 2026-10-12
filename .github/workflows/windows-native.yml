@@ -1,0 +1,49 @@
+name: Windows Native Validation
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-windows.txt
+          python -m pip install -r requirements-test.txt
+      - name: Test
+        run: python -m pytest -q tests --tb=short
+      - name: Compile
+        run: python -m compileall -q app scripts
+      - name: Unsafe production config must be rejected
+        shell: pwsh
+        run: |
+          $env:APP_ENV = 'production'
+          $env:AUTH_MODE = 'dev_headers'
+          python scripts/production_preflight.py --require-production
+          if ($LASTEXITCODE -eq 0) { throw 'Invalid production configuration was accepted' }
+          $env:APP_ENV = 'development'
+      - name: Native boot smoke test
+        shell: pwsh
+        run: |
+          Copy-Item .env.windows.test.example .env
+          $env:APP_MODE='local'
+          $env:POSTGRES_URL=''
+          $p = Start-Process python -ArgumentList '-m','uvicorn','app.main:app','--host','127.0.0.1','--port','8000' -PassThru
+          Start-Sleep -Seconds 4
+          try {
+            $r = Invoke-RestMethod http://127.0.0.1:8000/api/health
+            if (-not $r.ok) { throw 'Health check failed' }
+            .\windows\Test-Phase2.ps1 -BaseUrl 'http://127.0.0.1:8000'
+            .\windows\Test-Phase3.ps1 -BaseUrl 'http://127.0.0.1:8000'
+            .\windows\Test-Phase4.ps1 -BaseUrl 'http://127.0.0.1:8000'
+            .\windows\Test-Phase5.ps1 -BaseUrl 'http://127.0.0.1:8000'
+          } finally {
+            Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+          }

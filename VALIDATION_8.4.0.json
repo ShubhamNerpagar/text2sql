@@ -1,0 +1,74 @@
+{
+  "version": "8.4.0",
+  "validated_at": "2026-10-11T11:25:27.843152+00:00",
+  "automated_tests": {
+    "command": "python -m pytest -q",
+    "passed": 189,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "warning": "Starlette TestClient uses a deprecated anyio BlockingPortal alias",
+    "duration_seconds": 127.07
+  },
+  "browser": {
+    "version": "8.4.0",
+    "status": "passed",
+    "checks": [
+      "Ask executes the approved net-sales formula: 350",
+      "Follow-up uses approved city join and retains completed-sales meaning",
+      "Screen loads: admin/onboarding",
+      "Screen loads: semantics/ontology",
+      "Screen loads: semantics/relationships",
+      "Screen loads: semantics/golden",
+      "Screen loads: semantics/plan-lab",
+      "Screen loads: admin/ai-models",
+      "Missing LLM disables question entry and offers model connection",
+      "Connect AI model navigates to model settings"
+    ],
+    "page_errors": [],
+    "provider": "mocked Bedrock contract; live SQLAlchemy/SQLite fixture",
+    "live_bedrock_tested": false
+  },
+  "http_smoke": {
+    "/api/health": {
+      "ok": true,
+      "version": "8.4.0"
+    },
+    "/api/ready": {
+      "ready": false,
+      "expected_missing_prerequisites": [
+        "data_source_configured",
+        "semantic_workspace_generated"
+      ]
+    },
+    "/api/llm/status": {
+      "ready": false,
+      "offline_fallback": false
+    },
+    "/api/bootstrap": {
+      "requires_onboarding": true
+    }
+  },
+  "syntax_checks": {
+    "python_compileall": "passed",
+    "javascript_node_check": "passed",
+    "git_diff_check": "passed"
+  },
+  "live_bedrock_tested": false,
+  "live_enterprise_warehouses_tested": false,
+  "windows_ec2_tested": false,
+  "limitations": [
+    "AWS profile unavailable and no alternate usable credential chain found",
+    "Bedrock behavior tested with explicit mocked provider contracts",
+    "Compiler executed against independent SQLite fixtures through SQLAlchemy and the explicit synthetic connector",
+    "Live accuracy must be measured using approved reference SQL on the target warehouse",
+    "Existing prose-only or inferred definitions and legacy report widgets require migration"
+  ],
+  "cloud_setup": {
+    "installed": "/workspace/.venvs/dip",
+    "install_script": "saved and exercised",
+    "start_skill": "saved",
+    "network": "existing destinations preserved; Bedrock and STS endpoints added for ap-south-1 and eu-west-1",
+    "published": false
+  }
+}

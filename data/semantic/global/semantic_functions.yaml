@@ -1,0 +1,9 @@
+semantic_functions:
+  safe_ratio:
+    description: Safe division for governed derived metrics.
+    template: "({numerator}) / NULLIF(({denominator}), 0)"
+    status: certified
+  period_growth:
+    description: Percentage growth between current and previous period values.
+    template: "(({current}) - ({previous})) / NULLIF(ABS({previous}), 0)"
+    status: certified

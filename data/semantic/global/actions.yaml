@@ -1,0 +1,17 @@
+actions:
+  - id: create_data_review
+    label: Create data review
+    description: Record a governed review request for a semantic/data issue. The default handler is audit-only and has no warehouse write access.
+    handler: audit_only
+    roles: [analyst, data_steward, semantic_admin, admin]
+    parameters:
+      - {name: subject, type: string, required: true}
+      - {name: reason, type: string, required: true}
+  - id: request_semantic_certification
+    label: Request semantic certification
+    description: Record a request for a steward to certify a metric, relationship, or description.
+    handler: audit_only
+    roles: [data_steward, semantic_admin, admin]
+    parameters:
+      - {name: asset_id, type: string, required: true}
+      - {name: note, type: string, required: false}

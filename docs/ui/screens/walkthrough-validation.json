@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "checks": [
+    "Nine actual-screen walkthrough steps load from self-contained HTML",
+    "All nine step buttons display valid embedded images and descriptions",
+    "Missing-model Ask variant works",
+    "Full-size screenshot modal opens and closes",
+    "Next, Back and keyboard navigation work",
+    "Illustrative total and city calculations preserve the completed-order formula",
+    "Mobile layout fits a 390-pixel viewport"
+  ],
+  "page_errors": [],
+  "does_not_invoke_models": true
+}

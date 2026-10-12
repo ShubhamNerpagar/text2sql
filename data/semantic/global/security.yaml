@@ -1,0 +1,13 @@
+security:
+  role_permissions:
+    analyst: [query, execute_action]
+    data_steward: [query, semantic_review, manage_branch, execute_action]
+    semantic_admin: ["*"]
+    admin: ["*"]
+    pii_access: [query, pii_access]
+  column_policies:
+    - id: pii-contact
+      description: Direct contact identifiers require explicit PII access.
+      columns: ["*.*email*", "*.*e_mail*", "*.*phone*", "*.*telephone*", "*.*mobile*"]
+      roles: [pii_access, semantic_admin, admin]
+  row_policies: []

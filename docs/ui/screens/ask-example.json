@@ -1,0 +1,293 @@
+{
+  "first": {
+    "question": "Revenue",
+    "release_id": "p3-v1",
+    "planner": "bedrock",
+    "model_id": "contract-semantic_planning",
+    "model_used": true,
+    "executed": true,
+    "columns": [
+      "value"
+    ],
+    "rows": [
+      {
+        "value": 350.0
+      }
+    ],
+    "row_count": 1,
+    "proposed_plan": {
+      "base_asset_id": "asset:9f6e947a68e16088d3cee631",
+      "metrics": [
+        {
+          "metric_id": "net_sales",
+          "alias": "value"
+        }
+      ],
+      "dimensions": [],
+      "concept_ids": [],
+      "join_relationship_ids": [],
+      "filters": [],
+      "having": [],
+      "order_by": [],
+      "limit": 50
+    },
+    "plan": {
+      "workspace_id": "business-1d22d08e",
+      "release_id": "p3-v1",
+      "source_id": "postgres",
+      "database": "main",
+      "tables": [
+        {
+          "asset_id": "asset:9f6e947a68e16088d3cee631",
+          "table": "orders_1d22d08e",
+          "alias": "t0",
+          "role": null
+        }
+      ],
+      "metric_ids": [
+        "net_sales"
+      ],
+      "concept_ids": [],
+      "effective_filters": [
+        {
+          "asset_id": "asset:9f6e947a68e16088d3cee631",
+          "column": "status",
+          "op": "eq",
+          "value": "Complete"
+        }
+      ],
+      "join_evidence": [],
+      "sql": "SELECT SUM((t0.\"amount\" - t0.\"refund\")) AS \"value\" FROM \"main\".\"orders_1d22d08e\" AS t0 WHERE t0.\"status\" = 'Complete' LIMIT 50",
+      "query_type": "certified_business_aggregate",
+      "plan_digest": "4facd706b50ca25e8d06e89ac6b519f6f9b3b88d0615b07c3e3d627449472129",
+      "result_limit": 50,
+      "policy": {
+        "read_only": true,
+        "approved_many_to_one_joins": true,
+        "certified_columns": true,
+        "metric_definitions_enforced": true,
+        "grain_checked": true,
+        "llm_sql_execution": false
+      }
+    },
+    "status": "executed",
+    "usage": {
+      "query_id": "postgres-query",
+      "execution_ms": 0,
+      "bytes_scanned": null
+    },
+    "answer": "Returned 1 result rows using certified business definitions.",
+    "chart_type": "kpi",
+    "structured_plan": {
+      "base_asset_id": "asset:9f6e947a68e16088d3cee631",
+      "metrics": [
+        {
+          "metric_id": "net_sales",
+          "alias": "value"
+        }
+      ],
+      "dimensions": [],
+      "concept_ids": [],
+      "join_relationship_ids": [],
+      "filters": [],
+      "having": [],
+      "order_by": [],
+      "limit": 50
+    },
+    "semantic_review": {
+      "passed": true,
+      "model_id": "contract-semantic_verification",
+      "coverage_checked": true
+    },
+    "intent": {
+      "mode": "new",
+      "change_fields": [],
+      "clauses": [
+        {
+          "start": 0,
+          "end": 7,
+          "text": "Revenue",
+          "targets": [
+            "/metrics/0"
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "release_digest": "aa1191460f879fd0c7b13080e52bd86cc42999006c6ea7bf4018c761992b86d7",
+      "approved_join_ids": [],
+      "metric_ids": [
+        "net_sales"
+      ],
+      "concept_ids": [],
+      "plan_digest": "4facd706b50ca25e8d06e89ac6b519f6f9b3b88d0615b07c3e3d627449472129",
+      "certified_assets": [
+        "asset:9f6e947a68e16088d3cee631"
+      ]
+    },
+    "notice": "LLM proposed and independently reviewed the plan; application enforced definitions, grain and read-only SQL."
+  },
+  "followup": {
+    "question": "Now by city",
+    "release_id": "p3-v1",
+    "planner": "bedrock",
+    "model_id": "contract-semantic_planning",
+    "model_used": true,
+    "executed": true,
+    "columns": [
+      "d1",
+      "value"
+    ],
+    "rows": [
+      {
+        "d1": "Berlin",
+        "value": 90.0
+      },
+      {
+        "d1": "Paris",
+        "value": 260.0
+      }
+    ],
+    "row_count": 2,
+    "proposed_plan": {
+      "base_asset_id": "asset:9f6e947a68e16088d3cee631",
+      "metrics": [
+        {
+          "metric_id": "net_sales",
+          "alias": "value"
+        }
+      ],
+      "dimensions": [
+        {
+          "asset_id": "asset:c666c4b70aaf8e385880c8ff",
+          "column": "city"
+        }
+      ],
+      "concept_ids": [],
+      "join_relationship_ids": [
+        "rel:333afe13c4fd7fec023082f3"
+      ],
+      "filters": [],
+      "having": [],
+      "order_by": [],
+      "limit": 50
+    },
+    "plan": {
+      "workspace_id": "business-1d22d08e",
+      "release_id": "p3-v1",
+      "source_id": "postgres",
+      "database": "main",
+      "tables": [
+        {
+          "asset_id": "asset:9f6e947a68e16088d3cee631",
+          "table": "orders_1d22d08e",
+          "alias": "t0",
+          "role": null
+        },
+        {
+          "asset_id": "asset:c666c4b70aaf8e385880c8ff",
+          "table": "customers_1d22d08e",
+          "alias": "t1",
+          "role": "rel:333afe13c4fd7fec023082f3"
+        }
+      ],
+      "metric_ids": [
+        "net_sales"
+      ],
+      "concept_ids": [],
+      "effective_filters": [
+        {
+          "asset_id": "asset:9f6e947a68e16088d3cee631",
+          "column": "status",
+          "op": "eq",
+          "value": "Complete"
+        }
+      ],
+      "join_evidence": [
+        "rel:333afe13c4fd7fec023082f3"
+      ],
+      "sql": "SELECT t1.\"city\" AS d1, SUM((t0.\"amount\" - t0.\"refund\")) AS \"value\" FROM \"main\".\"orders_1d22d08e\" AS t0 LEFT JOIN \"main\".\"customers_1d22d08e\" AS t1 ON t0.\"customer_id\" = t1.\"customer_id\" WHERE t0.\"status\" = 'Complete' GROUP BY t1.\"city\" LIMIT 50",
+      "query_type": "certified_business_aggregate",
+      "plan_digest": "66599d56a97ab7e25d5a738376829017e37ecd667f24c8fa8898779877a559a5",
+      "result_limit": 50,
+      "policy": {
+        "read_only": true,
+        "approved_many_to_one_joins": true,
+        "certified_columns": true,
+        "metric_definitions_enforced": true,
+        "grain_checked": true,
+        "llm_sql_execution": false
+      }
+    },
+    "status": "executed",
+    "usage": {
+      "query_id": "postgres-query",
+      "execution_ms": 0,
+      "bytes_scanned": null
+    },
+    "answer": "Returned 2 result rows using certified business definitions.",
+    "chart_type": "bar",
+    "structured_plan": {
+      "base_asset_id": "asset:9f6e947a68e16088d3cee631",
+      "metrics": [
+        {
+          "metric_id": "net_sales",
+          "alias": "value"
+        }
+      ],
+      "dimensions": [
+        {
+          "asset_id": "asset:c666c4b70aaf8e385880c8ff",
+          "column": "city"
+        }
+      ],
+      "concept_ids": [],
+      "join_relationship_ids": [
+        "rel:333afe13c4fd7fec023082f3"
+      ],
+      "filters": [],
+      "having": [],
+      "order_by": [],
+      "limit": 50
+    },
+    "semantic_review": {
+      "passed": true,
+      "model_id": "contract-semantic_verification",
+      "coverage_checked": true
+    },
+    "intent": {
+      "mode": "followup",
+      "change_fields": [
+        "dimensions",
+        "join_relationship_ids"
+      ],
+      "clauses": [
+        {
+          "start": 0,
+          "end": 11,
+          "text": "Now by city",
+          "targets": [
+            "/dimensions/0"
+          ]
+        }
+      ]
+    },
+    "evidence": {
+      "release_digest": "aa1191460f879fd0c7b13080e52bd86cc42999006c6ea7bf4018c761992b86d7",
+      "approved_join_ids": [
+        "rel:333afe13c4fd7fec023082f3"
+      ],
+      "metric_ids": [
+        "net_sales"
+      ],
+      "concept_ids": [],
+      "plan_digest": "66599d56a97ab7e25d5a738376829017e37ecd667f24c8fa8898779877a559a5",
+      "certified_assets": [
+        "asset:9f6e947a68e16088d3cee631",
+        "asset:c666c4b70aaf8e385880c8ff"
+      ]
+    },
+    "notice": "LLM proposed and independently reviewed the plan; application enforced definitions, grain and read-only SQL."
+  },
+  "source": "Actual application workflow with mocked Bedrock and SQLite demonstration data"
+}

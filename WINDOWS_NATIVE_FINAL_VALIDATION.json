@@ -1,0 +1,70 @@
+{
+  "product": "Data Intelligence Platform",
+  "version": "7.0.1",
+  "variant": "Windows EC2 Native",
+  "validation_date": "2026-10-08",
+  "status": "semantic-runtime-fix-candidate",
+  "automated_tests": {
+    "passed": 73,
+    "failed": 0,
+    "command": "python -m pytest -q"
+  },
+  "static_validation": {
+    "python_compileall": "pass",
+    "javascript_node_check": "pass",
+    "json_parse": "pass",
+    "yaml_parse": "pass"
+  },
+  "runtime_smoke": {
+    "uvicorn_startup": "pass",
+    "health_endpoint": "pass",
+    "reported_version": "7.0.1",
+    "root_ui_served": "covered_by_existing_windows smoke + static UI package",
+    "docker_required": false
+  },
+  "local_load_smoke": {
+    "endpoint": "/api/health",
+    "requests": 300,
+    "concurrency": 30,
+    "success": 300,
+    "errors": 0,
+    "rps": 633.33,
+    "p50_ms": 21.57,
+    "p95_ms": 179.65,
+    "p99_ms": 257.99,
+    "max_ms": 265.17,
+    "note": "Single-run local health-endpoint smoke in shared validation environment; not a production performance claim."
+  },
+  "semantic_regression_validation": {
+    "screenshot_shaped_schema": "pass",
+    "inferred_metrics_materialized": true,
+    "dataset_explanation_without_sql": true,
+    "sum_aggregation_honored": true,
+    "avg_aggregation_honored_by_compiler_contract": true,
+    "count_distinct_identifier_metric": true,
+    "no_silent_count_star_fallback": true,
+    "metric_promote_certify_lifecycle": "pass",
+    "legacy_suggestion_id_compatibility": true,
+    "semantic_tab_active_state_fix": true,
+    "sample_rows_required": false,
+    "example_vga_like_metric_count": 8,
+    "example_total_cycles_result": 30,
+    "example_missing_car_id_behavior": "needs_clarification"
+  },
+  "windows_native": {
+    "docker_required": false,
+    "powershell_install_script": true,
+    "powershell_start_script": true,
+    "windows_startup_task_script": true,
+    "windows_report_worker_task_script": true,
+    "ec2_instance_profile_policy_template": true,
+    "github_windows_runner_workflow": true,
+    "test_profile_allow_inferred_analytics": true,
+    "production_profile_allow_inferred_analytics": false
+  },
+  "limitations": [
+    "PowerShell scripts cannot be executed on the Linux validation host; native Windows CI workflow remains included.",
+    "Real Athena/Glue/S3/IAM behavior still requires the target AWS account and EC2 instance profile.",
+    "Business correctness of inferred metric meanings must be reviewed/certified by a data steward before production use."
+  ]
+}

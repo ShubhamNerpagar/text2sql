@@ -1,0 +1,41 @@
+{
+  "release": "8.0.0-phase1",
+  "variant": "Windows-native, Python/Uvicorn, no Docker",
+  "phase": "1 - Enterprise Catalog, Scope Builder, Offline Demo, Bedrock Model Selector",
+  "validation_date": "2026-10-09",
+  "tests": {"passed": 86, "failed": 0, "execution_environment": "Linux Python test runner", "real_windows_executed": false},
+  "static_checks": {"python_compileall": "passed", "javascript_node_check": "passed"},
+  "live_server_smoke": {
+    "uvicorn_start": "passed",
+    "health": "HTTP 200",
+    "bootstrap": "HTTP 200",
+    "offline_catalog": "HTTP 200, 8 tables",
+    "saved_scopes": "HTTP 200",
+    "bedrock_models_offline": "HTTP 200, error status expected without AWS access",
+    "html_root": "HTTP 200",
+    "javascript_asset": "HTTP 200"
+  },
+  "end_to_end": {
+    "selected_table": "contoso_demo.Orders",
+    "workspace_created": true,
+    "question": "How many orders are there?",
+    "status": "success",
+    "generated_sql": "SELECT COUNT(*) AS record_count FROM \"contoso_demo\".\"Orders\" t0",
+    "answer": 10000
+  },
+  "connector_validation": {
+    "athena_glue": "mocked paginated discovery and selected-table metadata; real AWS not validated",
+    "postgres": "SQLAlchemy/SQLite testing only; real Aurora/PostgreSQL not validated",
+    "snowflake": "metadata route implemented; real connection not validated",
+    "databricks": "metadata route implemented; real connection not validated",
+    "bedrock": "mocked API discovery, invocation and permissions; real AWS not validated",
+    "sqlbi_official_csv": "installer implemented; external download and installation not validated"
+  },
+  "package_limitations": [
+    "The bundled 10K retail data is illustrative, independently generated and NOT the official SQLBI Contoso release.",
+    "Use windows/Install-Contoso.ps1 to download and install official SQLBI 10K CSV using the user's network.",
+    "Native Windows PowerShell script execution and AWS EC2 deployment require user's Windows host.",
+    "Phase 1 browses 1000 databases with pagination but production load benchmarking and workers are Phase 5.",
+    "Cross-schema/multi-catalog semantic SQL namespace reconciliation remains for Phase 2."
+  ]
+}
