@@ -14,4 +14,4 @@ A failure returns a connection, availability or response error and does not exec
 
 In the development environment used for this change, the configured AWS profile was unavailable and no usable alternative credential chain was found. No live LLM or live warehouse answer was claimed. Configure credentials through your AWS/environment settings; do not paste credentials into chat or package them with the application.
 
-`APP_MODE=local` controls local platform state, not offline answering. Metadata browsing and deterministic graph inspection remain available for setup. `ENABLE_SAMPLE_EXECUTION=false` is the normal setting and is required in production.
+`APP_MODE=local` controls local platform state, not offline answering. Metadata browsing and deterministic graph inspection remain available for setup. `ENABLE_SAMPLE_EXECUTION=true` makes the optional Contoso source selectable, including in a secured production installation. It does not enable offline answering. Set it to false if the installation should not offer sample execution.

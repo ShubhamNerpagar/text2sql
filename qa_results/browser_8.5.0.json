@@ -1,0 +1,21 @@
+{
+  "version": "8.5.0",
+  "status": "passed",
+  "checks": [
+    "Source selection starts with no connector or dataset selected",
+    "Datasets remain selected when browsing another connector",
+    "Saved workspace scope contains both connector identities and exact datasets",
+    "Reloading a mixed-source selection restores both connectors",
+    "Contoso can be deselected while the users own source remains selected",
+    "Dataset inspector selects a source-bound asset identity",
+    "Follow-up combines PostgreSQL and Contoso with correct results and preserved metric",
+    "Benchmark authoring explains scoped cross-source SQL table aliases",
+    "Selecting sample data or multiple sources does not enable Ask without a verified model",
+    "The missing-model connection button opens AI model settings"
+  ],
+  "page_errors": [],
+  "provider": "mocked Bedrock",
+  "sources": "SQLAlchemy/SQLite and bundled Contoso",
+  "live_bedrock_tested": false,
+  "live_enterprise_warehouses_tested": false
+}

@@ -24,22 +24,30 @@ class BusinessBenchmarkService:
         sql=body.get('reference_sql','')
         asset_id=body.get('reference_asset_id')
         if body.get('previous_plan') is not None:self.engine.compile(workspace,body['release_id'],body['previous_plan'])
+        reference_assets=[];federated=False
         if expected=='answer':
             ok,_=validate_read_only_sql(sql)
             if not ok or not re.match(r'\s*SELECT\b',sql,re.I) or not re.search(r'\b(SUM|COUNT|AVG|MIN|MAX)\s*\(',sql,re.I):
                 raise ValueError('Reference SQL must be an independently reviewed read-only aggregate SELECT')
             asset=self.engine.p2.asset(workspace,asset_id)
-            allowed={self.engine.p2._table_sql(a).replace('"','').replace('`','').lower() for a in self.engine.p2.assets(workspace)}
+            from app.services.federation_service import FederationService
+            assets=self.engine.p2.assets(workspace)
+            physical={self.engine.p2._table_sql(a).replace('"','').replace('`','').lower():a for a in assets if a['source_id']==asset['source_id']}
+            aliases={FederationService.table_name(a):a for a in assets}
             scrubbed=re.sub(r"'(?:''|[^'])*'", "''",sql)
             tables=re.findall(r'\b(?:FROM|JOIN)\s+([\w."`]+)',scrubbed,re.I)
-            if not tables or any(t.replace('"','').replace('`','').lower() not in allowed for t in tables):raise ValueError('Reference SQL reads an unscoped table')
-            if any(a['source_id']!=asset['source_id'] for a in self.engine.p2.assets(workspace)):raise ValueError('Reference connector must be unambiguous')
+            names=[t.replace('"','').replace('`','').lower() for t in tables]
+            federated=bool(names and all(t in aliases for t in names))
+            allowed=aliases if federated else physical
+            if not names or any(t not in allowed for t in names):raise ValueError('Reference SQL reads an unscoped table; use f_<asset ID suffix> aliases for a cross-connector reference')
+            reference_assets=list(dict.fromkeys(allowed[t]['asset_id'] for t in names))
             funcs=set(x.upper() for x in re.findall(r'\b([A-Za-z_][A-Za-z_0-9]*)\s*\(',scrubbed))
             if funcs-{'SUM','COUNT','AVG','MIN','MAX','COALESCE','NULLIF','ROUND','CAST','DATE_TRUNC','STRFTIME','IN'}:
                 raise ValueError('Reference SQL contains an unsupported function')
         ident=body.get('case_id') or 'case-'+uuid4().hex[:16]
         row={'workspace_id':workspace,'case_id':ident,'release_id':body['release_id'],'question':question,
             'expected':expected,'reference_sql':sql,'reference_asset_id':asset_id,'previous_plan':body.get('previous_plan'),
+            'reference_asset_ids':reference_assets,'federated_reference':federated,
             'authored_by':actor,'updated_at':datetime.now(timezone.utc).isoformat()}
         return self.repo.put('BUSINESS_CASE',workspace+'::'+ident,row)
 
@@ -74,7 +82,11 @@ class BusinessBenchmarkService:
                 if c['expected']=='refuse':passed=answer['status']=='needs_clarification' and not answer['executed']
                 elif answer['executed']:
                     a=self.engine.p2.asset(workspace,c['reference_asset_id'])
-                    reference=self.engine.p2.sources.execute(a['source_id'],c['reference_sql'],a['database'])
+                    if c.get('federated_reference'):
+                        from app.services.federation_service import FederationService
+                        assets=[self.engine.p2.asset(workspace,aid) for aid in c['reference_asset_ids']]
+                        reference=FederationService(self.engine.p2).execute(workspace,assets,c['reference_sql'])
+                    else:reference=self.engine.p2.sources.execute(a['source_id'],c['reference_sql'],a['database'])
                     passed=self.equivalent(answer['rows'],reference['rows'])
                 else:passed=False
                 observations.append({'case_id':c['case_id'],'status':'passed' if passed else 'failed','question':c['question']})

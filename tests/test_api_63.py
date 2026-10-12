@@ -7,7 +7,7 @@ ANALYST={'X-Roles':'analyst','X-User':'test-analyst'}
 
 
 def test_health_and_version():
-    d=client.get('/api/health',headers=ADMIN).json(); assert d['ok'] and d['version']=='8.4.0'
+    d=client.get('/api/health',headers=ADMIN).json(); assert d['ok'] and d['version']=='8.5.0'
 
 
 def test_bootstrap_returns_generated_workspace():

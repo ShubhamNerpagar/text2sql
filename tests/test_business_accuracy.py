@@ -37,7 +37,8 @@ H={'X-User':'creator','X-Roles':'semantic_admin'}
 from governed_fixtures import plan
 
 
-def test_no_offline_model_fallback_even_for_counts(business):
+def test_no_offline_model_fallback_even_for_counts(business,monkeypatch):
+    monkeypatch.setattr(LLMPlannerService,'status',lambda self:{'ready':False})
     with pytest.raises(ValueError,match='LLM_CONNECTION_REQUIRED'):
         UnifiedAskService().ask(business.w,business.release,'Count orders')
 
@@ -268,11 +269,11 @@ def test_local_store_cache_does_not_persist_unwritten_mutation():
     repo.delete('BUSINESS_CASE',key)
 
 
-def test_synthetic_execution_requires_explicit_fixture_flag(monkeypatch):
+def test_sample_source_can_be_disabled_by_configuration(monkeypatch):
     from dataclasses import replace
     from app.services.data_source_service import DataSourceService
     service=DataSourceService();service.s=replace(service.s,enable_sample_execution=False)
-    with pytest.raises(ValueError,match='Synthetic execution is disabled'):service.execute('contoso','SELECT COUNT(*) FROM Orders','contoso_demo')
+    with pytest.raises(ValueError,match='Contoso sample source is disabled'):service.execute('contoso','SELECT COUNT(*) FROM Orders','contoso_demo')
 
 
 def test_sql_safety_distinguishes_data_from_statement_tokens():

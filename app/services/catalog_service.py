@@ -8,9 +8,20 @@ class CatalogService:
     def _dd(self,market:str|None=None):
         dd=self.repo.ontology().get('data_dictionary',{}) or {}
         if not market: return dd
+        from app.repositories.control_repository import ControlRepository
+        control=ControlRepository();workspace=control.get('WORKSPACE',market) or {}
+        scope=control.get('SCOPE',workspace['scope_id']) if workspace.get('scope_id') else None
+        if scope:
+            out={}
+            for t in scope['tables']:
+                source=t.get('source_id') or scope['source_id']
+                db=t['database'] if scope['source_id']!='federated' else f"{source}::{t['database']}::{t.get('schema','')}"
+                info=dd.get(db,{}).get(t['table'])
+                if info is not None:out.setdefault(db,{})[t['table']]=info
+            return out
         out={}
         for db,tables in dd.items():
-            selected={name:info for name,info in (tables or {}).items() if not (info or {}).get('market') or (info or {}).get('market')==market}
+            selected={name:info for name,info in (tables or {}).items() if market in ((info or {}).get('workspace_ids') or [(info or {}).get('market')])}
             if selected: out[db]=selected
         return out
     def databases(self,market:str|None=None): return sorted(self._dd(market).keys())

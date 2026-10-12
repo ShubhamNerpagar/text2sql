@@ -53,7 +53,7 @@ def provider_contract(release,bedrock_contract):
     return bedrock_contract
 
 def test_p4_packaging_and_permissions(release):
-    assert client.get('/api/health').json()['version']=='8.4.0'
+    assert client.get('/api/health').json()['version']=='8.5.0'
     d=client.get(u('overview'),headers=ADMIN)
     assert d.status_code==200 and d.json()['eligible']==2
     assert client.get(u('releases'),headers=ANALYST).status_code==403
@@ -152,7 +152,7 @@ def test_p4_stale_evidence_blocks_all_query_consumers(release):
 
 def test_p4_mcp_jsonrpc_contract(release):
     r=client.post(u('mcp'),json={'jsonrpc':'2.0','id':1,'method':'initialize'},headers=ADMIN)
-    assert r.status_code==200 and r.json()['result']['serverInfo']['version']=='8.4.0'
+    assert r.status_code==200 and r.json()['result']['serverInfo']['version']=='8.5.0'
     tools=client.post(u('mcp'),json={'id':2,'method':'tools/list'},headers=ADMIN)
     assert len(tools.json()['result']['tools'])==4
     x=client.post(u('mcp'),json={'id':3,'method':'tools/call','params':{'name':'ontology.ask',

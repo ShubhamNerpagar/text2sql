@@ -50,11 +50,11 @@ class Phase2Service:
 
     @staticmethod
     def asset_id(scope,obj):
-        return 'asset:'+digest({'source':scope['source_id'],**{k:obj.get(k,'') for k in ('catalog','database','schema','table')}})[:24]
+        return 'asset:'+digest({'source':obj.get('source_id') or scope['source_id'],**{k:obj.get(k,'') for k in ('catalog','database','schema','table')}})[:24]
 
     def assets(self,workspace):
         s=self.scope(workspace)
-        return [{'asset_id':self.asset_id(s,t),'workspace_id':workspace,'source_id':s['source_id'],**t} for t in s['tables']]
+        return [{'asset_id':self.asset_id(s,t),'workspace_id':workspace,**t,'source_id':t.get('source_id') or s['source_id']} for t in s['tables']]
 
     def asset(self,workspace,asset_id):
         a=next((x for x in self.assets(workspace) if x['asset_id']==asset_id),None)
@@ -243,8 +243,6 @@ class Phase2Service:
             raise ValueError('Duplicate relationship columns')
         if not set(source_columns)<={c['name'] for c in ma['columns']} or not set(target_columns)<={c['name'] for c in mb['columns']}:
             raise ValueError('Relationship keys must belong to scoped assets')
-        if a['source_id']!=b['source_id'] or a['database']!=b['database']:
-            raise ValueError('Relationships must use one connector and database')
         role=role or '_'.join(source_columns)
         key=(source,source_columns[0],target,target_columns[0]) if len(source_columns)==1 else (source,source_columns,target,target_columns)
         rid='rel:'+digest(key)[:24]
@@ -309,8 +307,8 @@ class Phase2Service:
         sc,tc=self.relationship_columns(r)
         if not set(sc)<={c['name'] for c in ma['columns']} or not set(tc)<={c['name'] for c in mb['columns']}:
             raise ValueError('Relationship schema drift')
-        if a['source_id']!=b['source_id'] or a['database']!=b['database']:
-            raise ValueError('Cross-connector/database joins are prohibited')
+        from app.services.federation_service import FederationService,quote as fq
+        federated=FederationService.required([a,b])
         q=(lambda v:'`'+self._ident(v)[1:-1]+'`') if a['source_id']=='databricks' else self._ident
         src=self._table_sql(a);tgt=self._table_sql(b)
         scol=', '.join(q(c)+f' AS k{i}' for i,c in enumerate(sc));tcol=', '.join(q(c)+f' AS k{i}' for i,c in enumerate(tc))
@@ -327,12 +325,24 @@ class Phase2Service:
              '(SELECT COALESCE(SUM(n-1),0) FROM tgt) AS target_duplicate_rows, '
              f'(SELECT COUNT(*) FROM src s JOIN tgt t ON {on}) AS matched_distinct, '
              f'(SELECT COALESCE(SUM(s.n),0) FROM src s JOIN tgt t ON {on}) AS matched_rows')
-        stats,usage=self._aggregate(a,sql)
+        if federated:
+            source_types={c['name']:FederationService.dtype(c['type']) for c in ma['columns'] if c['name'] in sc}
+            target_types={c['name']:FederationService.dtype(c['type']) for c in mb['columns'] if c['name'] in tc}
+            def family(typ):
+                return 'number' if typ in {'BIGINT','DOUBLE'} or typ.startswith('DECIMAL') else typ
+            if any(family(source_types[x])!=family(target_types[y]) for x,y in zip(sc,tc)):
+                raise ValueError('Cross-source key types differ; provide compatible physical key columns')
+            federation=FederationService(self)
+            with federation.snapshot(workspace,[a,b],{a['asset_id']:sc,b['asset_id']:tc}) as (con,load):
+                query=FederationService.relationship_sql(fq(FederationService.table_name(a)),fq(FederationService.table_name(b)),sc,tc)
+                cur=con.execute(query);stats=dict(zip([c[0] for c in cur.description],cur.fetchone()))
+            usage={'query_id':'federated-relationship-evidence'}
+        else:stats,usage=self._aggregate(a,sql)
         values={k:int(v) for k,v in stats.items()};sd=values['source_distinct'];td=values['target_distinct'];tr=values['target_non_null_rows']
         measured={**values,'coverage':values['matched_distinct']/sd if sd else 0.0,
             'row_coverage':values['matched_rows']/values['source_non_null_rows'] if values['source_non_null_rows'] else 0.0,
             'target_uniqueness':td/tr if tr else 0.0,'evaluated_at':now(),'source':a['source_id'],
-            'query_id':usage.get('query_id'),'measurement':'full_aggregate_native_keys',
+            'query_id':usage.get('query_id'),'measurement':'complete_federated_snapshot_keys' if federated else 'full_aggregate_native_keys',
             'source_fingerprint':ma['fingerprint'],'target_fingerprint':mb['fingerprint'],
             'definition_digest':digest([r['from_asset'],sc,r['to_asset'],tc,r.get('role','')])}
         measured['passed']=sd>0 and measured['coverage']>=0.90 and measured['row_coverage']>=0.90 and values['target_duplicate_rows']==0

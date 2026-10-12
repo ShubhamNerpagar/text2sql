@@ -157,13 +157,14 @@ class EnterpriseCatalogService:
         # A scope contains explicitly selected tables, never an entire unbounded database.
         found=[]
         for obj in selection:
-            meta=self.table_details(source,obj.get('catalog',''),obj.get('database',''),obj.get('schema',''),obj['table'])
+            table_source=obj.get('source_id') or source
+            meta=self.table_details(table_source,obj.get('catalog',''),obj.get('database',''),obj.get('schema',''),obj['table'])
             # In legacy 7.0 semantic repository, database is the physical namespace.
             # Ambiguous schemas across databases are rejected until Phase 2's canonical asset IDs.
             meta['database']=obj.get('database') or obj.get('schema') or 'contoso_demo'
-            meta['source_id']=source
+            meta['source_id']=table_source
             found.append(meta)
-        pairs=[(x['database'],x['table']) for x in found]
+        pairs=[(x['source_id'],x['database'],x['table']) for x in found]
         if len(set(pairs))!=len(pairs): raise ValueError('Scope contains conflicting database.table names (cross-schema collision)')
         return {'source_id':source,'objects':found,'count':len(found),'scope':[f"{o['database']}.{o['table']}" for o in found],'sample_rows_used':False}
 

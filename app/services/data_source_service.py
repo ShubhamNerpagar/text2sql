@@ -1,5 +1,5 @@
 from __future__ import annotations
-import re, time
+import json, re, time
 from app.config import get_settings
 from app.adapters.aws import AwsAdapter
 
@@ -8,8 +8,10 @@ class DataSourceService:
     def __init__(self): self.s=get_settings()
 
     def sources(self):
+        from app.services.contoso_sample_service import SAMPLE_DIR
+        sample_available=any((SAMPLE_DIR/name).is_file() for name in ('contoso_demo.sqlite3','contoso_official.sqlite3'))
         return [
-            {'id':'contoso','label':'Test fixture (disabled for normal use)','configured':self.s.enable_sample_execution,'mode':'local','dialect':'sqlite','metadata':'sqlite'},
+            {'id':'contoso','label':'Contoso sample (optional)','configured':self.s.enable_sample_execution and sample_available,'mode':'local','dialect':'sqlite','metadata':'sqlite','optional':True,'bundled_dataset':(SAMPLE_DIR/'contoso_demo.sqlite3').is_file(),'official_dataset_installed':(SAMPLE_DIR/'contoso_official.sqlite3').is_file()},
             {'id':'athena','label':'Amazon Athena + Glue Catalog','configured':bool(self.s.is_aws and self.s.athena_output),'mode':'native','dialect':'athena','metadata':'glue'},
             {'id':'postgres','label':'PostgreSQL / Aurora','configured':bool(self.s.postgres_url),'mode':'sqlalchemy','dialect':'postgresql','metadata':'information_schema'},
             {'id':'snowflake','label':'Snowflake','configured':bool(self.s.snowflake_url),'mode':'sqlalchemy','dialect':'snowflake','metadata':'information_schema'},
@@ -76,16 +78,21 @@ class DataSourceService:
             out.append(row)
         return {'sources':out,'healthy':sum(1 for x in out if x['status']=='healthy'),'configured':sum(1 for x in out if x['configured'])}
 
-    def execute(self,source_id,sql,database=None):
+    def execute(self,source_id,sql,database=None,*,row_limit=None,payload_limit=None):
         from app.services.sql_safety import validate_read_only_sql
         ok,message=validate_read_only_sql(sql)
         if not ok:raise ValueError(message)
         source_id=(source_id or '').strip().lower()
+        cap=self.s.max_result_rows if row_limit is None else row_limit
+        if type(cap)!=int or cap<1 or cap>max(self.s.max_result_rows,self.s.federation_max_rows_per_asset+1):
+            raise ValueError('Invalid bounded result limit')
+        if payload_limit is not None and (type(payload_limit)!=int or not 0<=payload_limit<=self.s.federation_max_payload_bytes):
+            raise ValueError('Invalid snapshot payload limit')
         if source_id=='contoso':
-            if not self.s.enable_sample_execution:raise ValueError('Synthetic execution is disabled; connect a live data source')
+            if not self.s.enable_sample_execution:raise ValueError('Contoso sample source is disabled by configuration')
             from app.services.contoso_sample_service import ContosoSampleService
-            return ContosoSampleService().execute(sql,self.s.max_result_rows,database)
-        if source_id=='athena': return AwsAdapter().execute_query(sql,database)
+            return ContosoSampleService().execute(sql,cap,database,payload_limit=payload_limit)
+        if source_id=='athena': return AwsAdapter().execute_query(sql,database,row_limit=cap,payload_limit=payload_limit)
         url=self._url(source_id)
         if not url: raise RuntimeError(f'{source_id} is not configured.')
         try:
@@ -94,9 +101,19 @@ class DataSourceService:
         started=time.time(); engine=create_engine(url,pool_pre_ping=True); cols=[]; rows=[]
         try:
             with engine.connect() as conn:
-                r=conn.execute(text(sql)); cols=list(r.keys()); rows=[dict(zip(cols,row)) for row in r.fetchmany(self.s.max_result_rows)]
+                if payload_limit is not None:conn=conn.execution_options(stream_results=True)
+                r=conn.execute(text(sql)); cols=list(r.keys()); payload=0
+                while len(rows)<cap:
+                    chunk=r.fetchmany(min(1000,cap-len(rows)))
+                    if not chunk:break
+                    for row in chunk:
+                        item=dict(zip(cols,row))
+                        if payload_limit is not None:
+                            payload+=len(json.dumps(item,default=str,ensure_ascii=False).encode())
+                            if payload>payload_limit:raise ValueError('FEDERATION_LIMIT_EXCEEDED: Connector payload exceeds snapshot budget')
+                        rows.append(item)
         finally: engine.dispose()
-        return {'query_id':f'{source_id}-query','columns':cols,'rows':rows,'row_count':len(rows),'truncated':len(rows)>=self.s.max_result_rows,'bytes_scanned':None,'execution_ms':int((time.time()-started)*1000)}
+        return {'query_id':f'{source_id}-query','columns':cols,'rows':rows,'row_count':len(rows),'truncated':len(rows)>=cap,'bytes_scanned':None,'execution_ms':int((time.time()-started)*1000)}
 
     @staticmethod
     def _ident(value:str)->str:

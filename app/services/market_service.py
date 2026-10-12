@@ -115,6 +115,8 @@ class MarketService:
         if row.get("scope_id"):
             from app.services.semantic_registry_service import SemanticRegistryService
             result=SemanticRegistryService().project_context(wid,result)
+            selected=(row.get('semantic_context') or {}).get('data_sources')
+            if selected:result['data_sources']=deepcopy(selected)
         return result
 
     def save_workspace(self,workspace_id:str,semantic_context:dict,*,source_id:str,source_scope:list[str]|None=None,status:str='draft')->dict:

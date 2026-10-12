@@ -31,18 +31,18 @@ class QueryService:
         if data_source or database:
             from app.services.phase2_service import Phase2Service
             scope=Phase2Service().scope(market)
-            if data_source and scope['source_id']!=data_source:raise ValueError('Connector does not match the certified workspace')
+            if data_source and data_source not in scope.get('source_ids',[scope['source_id']])+[scope['source_id']]:raise ValueError('Connector does not match the certified workspace')
             if database and database not in {t['database'] for t in scope['tables']}:raise ValueError('Database does not match the certified workspace')
         if conversation_id:
             c=self.conversations.get(conversation_id)
             if c['market']!=market or (c['user_id']!=user.user_id and not self.security.is_admin(user)):raise PermissionError('Conversation access denied')
             previous=c.get('context',{}).get('structured_plan')
         if approved_plan is not None:
-            out=AdvancedQueryService().run(market,release_id,question,plan=approved_plan,execute=execute)
+            engine=AdvancedQueryService()
+            engine.check_constraints(engine.compile(market,release_id,approved_plan),{'source_id':data_source,'database':database})
+            out=engine.run(market,release_id,question,plan=approved_plan,execute=execute)
             out['structured_plan']=approved_plan
-        else:out=UnifiedAskService().ask(market,release_id,question,execute,previous)
-        if data_source and out.get('plan',{}).get('source_id')!=data_source:raise ValueError('Requested connector does not match the certified release')
-        if database and out.get('plan',{}).get('database')!=database:raise ValueError('Requested database does not match the certified release')
+        else:out=UnifiedAskService().ask(market,release_id,question,execute,previous,{'source_id':data_source,'database':database})
         result={k:out.get(k) for k in ('rows','columns','row_count','usage')} if out.get('executed') else None
         response={**out,'query_id':'q-'+uuid.uuid4().hex[:16],'conversation_id':conversation_id,
             'status':'success' if out.get('executed') else out['status'],'market':market,'mode':self.s.app_mode,

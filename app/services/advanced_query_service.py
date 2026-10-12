@@ -42,6 +42,7 @@ class AdvancedQueryService:
             a=scoped[aid];meta=self.p2.metadata(w,aid);metas[aid]=meta
             certified={c for o in objs for c in o['binding']['columns']}
             candidates.append({'asset_id':aid,'table':a['table'],'database':a['database'],'source_id':a['source_id'],
+                'federated_table':'f_'+aid.split(':')[-1],
                 'columns':[{'name':c['name'],'type':str(c.get('type','')),'description':c.get('comment',''),
                     'certified_by':[{'object_id':o['object_id'],'kind':o['kind'],'label':o['label']} for o in objs if c['name'] in o['binding']['columns']]}
                     for c in meta['columns'] if c['name'] in certified]})
@@ -65,6 +66,15 @@ class AdvancedQueryService:
     def _llm(self,question,schema,previous_plan=None):
         from app.services.llm_planner_service import LLMPlannerService
         return LLMPlannerService().propose(question,schema,previous_plan)
+
+    @staticmethod
+    def check_constraints(compiled,constraints=None):
+        constraints=constraints or {}
+        source=constraints.get('source_id');database=constraints.get('database')
+        if source and source!='federated' and compiled['source_ids']!=[source]:
+            raise ValueError('Requested connector does not match the certified query plan; no query executed')
+        if database and any(a['database']!=database for a in compiled['assets']):
+            raise ValueError('Requested database does not match the certified query plan; no query executed')
 
     def compile(self,w,release_id,plan):
         if not isinstance(plan,dict):raise ValueError('A structured plan is required')
@@ -92,12 +102,16 @@ class AdvancedQueryService:
                     choices=[n for n in choices if n[1]==requested]
                     if not choices:continue
                 if len(choices)!=1:raise ValueError('Ambiguous relationship role; specify join_sources')
-                if amap[left]['source_id']!=amap[right]['source_id'] or amap[left]['database']!=amap[right]['database']:
-                    raise ValueError('Cross-source/database joins are prohibited')
                 alias=f't{len(joins)+1}';roles[rid]=(right,alias);nodes.setdefault(right,[]).append((alias,rid))
                 joins.append((e,choices[0][0],alias));pending.remove(rid);progress=True
             if not progress:raise ValueError('Disconnected or reverse-direction join')
-        quote=(lambda v:'`'+self.p2._ident(v)[1:-1]+'`') if amap[base]['source_id']=='databricks' else self.p2._ident
+        from app.services.federation_service import FederationService,quote as federation_quote
+        assets=[self.p2.asset(w,aid) for aid in nodes]
+        federated=FederationService.required(assets)
+        quote=federation_quote if federated else (lambda v:'`'+self.p2._ident(v)[1:-1]+'`') if amap[base]['source_id']=='databricks' else self.p2._ident
+        projection={aid:set() for aid in nodes};grains=[]
+        def table_sql(a):
+            return federation_quote(FederationService.table_name(a)) if federated else self.p2._table_sql(a)
         def ref(aid,column,role=None):
             if aid not in nodes or column not in {c['name'] for c in amap[aid]['columns']}:raise ValueError('Column is not certified on a joined dataset')
             options=nodes[aid]
@@ -105,6 +119,7 @@ class AdvancedQueryService:
                 options=[n for n in options if n[1]==role]
             elif aid==base:options=[('t0',None)]
             if len(options)!=1:raise ValueError('Specify the relationship role for an ambiguous dimension')
+            projection[aid].add(column)
             return options[0][0]+'.'+quote(column)
         dims=listfield('dimensions',8);metrics=listfield('metrics',8)
         if not metrics:raise ValueError('Select at least one approved metric ID')
@@ -122,10 +137,12 @@ class AdvancedQueryService:
                         raise ValueError('Local-time timestamp grouping requires an explicit timezone conversion definition')
                 if not any(t in typ for t in ('date','time')) and not any(x in d['column'].lower() for x in ('date','time')):raise ValueError('Time grouping requires a declared date column')
                 source=amap[base]['source_id']
-                if source=='contoso':
+                if source=='contoso' and not federated:
                     if grain=='quarter':expr=f"(strftime('%Y', {expr}) || '-Q' || ((CAST(strftime('%m', {expr}) AS INTEGER)+2)/3))"
                     else:expr=f"strftime('{ {'day':'%Y-%m-%d','month':'%Y-%m','year':'%Y'}[grain] }', {expr})"
-                else:expr=f"DATE_TRUNC('{grain}', {expr})"
+                else:
+                    if federated and not any(t in typ for t in ('date','time')):expr=f'CAST({expr} AS TIMESTAMP)'
+                    expr=f"DATE_TRUNC('{grain}', {expr})"
             groups.append(expr);select.append(expr+f' AS d{i}')
         def aggregate(aggregation,expression,reference):
             term=expression_sql(expression,reference)
@@ -139,6 +156,7 @@ class AdvancedQueryService:
             evidence=self.p2.grain_evidence(w,aid,sem['grain'])
             if not evidence['passed']:raise ValueError('Measure grain has null or duplicate keys; query refused')
             validate_semantics('measure',sem,obj['binding'])
+            projection[aid].update(sem['grain']);grains.append((aid,sem['grain']))
             reference=lambda c:ref(aid,c)
             agg=sem['aggregation']
             if agg=='count':expr='COUNT(*)'
@@ -201,11 +219,12 @@ class AdvancedQueryService:
             orders.append(quote(o['alias'])+' '+o['direction'].upper())
         limit=plan.get('limit',50)
         if type(limit)!=int or not 1<=limit<=100:raise ValueError('Limit must be 1–100')
-        asset=self.p2.asset(w,base);sql='SELECT '+', '.join(select)+' FROM '+self.p2._table_sql(asset)+' AS t0'
+        asset=self.p2.asset(w,base);sql='SELECT '+', '.join(select)+' FROM '+table_sql(asset)+' AS t0'
         for e,left_alias,right_alias in joins:
             # Role-specific aliases support composite and role-playing dimensions.
             conditions=[left_alias+'.'+quote(sc)+' = '+right_alias+'.'+quote(tc) for sc,tc in zip(e['from_columns'],e['to_columns'])]
-            sql+=' LEFT JOIN '+self.p2._table_sql(self.p2.asset(w,e['to_asset']))+' AS '+right_alias+' ON '+' AND '.join(conditions)
+            projection[e['from_asset']].update(e['from_columns']);projection[e['to_asset']].update(e['to_columns'])
+            sql+=' LEFT JOIN '+table_sql(self.p2.asset(w,e['to_asset']))+' AS '+right_alias+' ON '+' AND '.join(conditions)
         if filters:sql+=' WHERE '+' AND '.join(dict.fromkeys(filters))
         if groups:sql+=' GROUP BY '+', '.join(groups)
         if having:sql+=' HAVING '+' AND '.join(having)
@@ -213,8 +232,9 @@ class AdvancedQueryService:
         sql+=' LIMIT '+str(limit)
         ok,message=validate_read_only_sql(sql)
         if not ok:raise ValueError('SQL safety check failed: '+message)
-        return {'workspace_id':w,'release_id':release_id,'source_id':asset['source_id'],'database':asset['database'],
-            'tables':[{'asset_id':aid,'table':amap[aid]['table'],'alias':alias,'role':role} for aid,entries in nodes.items() for alias,role in entries],
+        return {'workspace_id':w,'release_id':release_id,'source_id':'federated' if federated else asset['source_id'],'source_ids':sorted({a['source_id'] for a in assets}),'execution_engine':'duckdb' if federated else 'native','database':None if federated else asset['database'],
+            'assets':assets,'projection':{aid:sorted(cols) for aid,cols in projection.items()},'grain_checks':grains,'relationship_checks':[e for e,_,_ in joins],
+            'tables':[{'asset_id':aid,'source_id':amap[aid]['source_id'],'database':amap[aid]['database'],'table':amap[aid]['table'],'alias':alias,'role':role} for aid,entries in nodes.items() for alias,role in entries],
             'metric_ids':used_metrics,'concept_ids':concepts,'effective_filters':effective_filters,
             'join_evidence':links,'sql':sql,'query_type':'certified_business_aggregate',
             'plan_digest':digest([schema['release_digest'],plan,sql]),'result_limit':limit,
@@ -245,8 +265,12 @@ class AdvancedQueryService:
                 raise ValueError('Sample execution is disabled; connect a live governed data source')
             checked=self.compile(w,release_id,plan)
             if checked['plan_digest']!=compiled['plan_digest']:raise ValueError('Evidence changed before execution')
-            result=self.p2.sources.execute(compiled['source_id'],compiled['sql'],compiled['database'])
+            if compiled['execution_engine']=='duckdb':
+                from app.services.federation_service import FederationService
+                result=FederationService(self.p2).execute(w,compiled['assets'],compiled['sql'],compiled['projection'],compiled['relationship_checks'],compiled['grain_checks'])
+            else:result=self.p2.sources.execute(compiled['source_id'],compiled['sql'],compiled['database'])
             out.update({'status':'executed','executed':True,'columns':result['columns'],'rows':result['rows'],'row_count':result['row_count'],
                 'usage':{k:result.get(k) for k in ('query_id','execution_ms','bytes_scanned')}})
+            if result.get('federation'):out['federation']=result['federation']
             self.governed.audit(w,'system','governed_business_aggregate',{'release_id':release_id,'plan_digest':compiled['plan_digest'],'metric_ids':compiled['metric_ids']})
         return out

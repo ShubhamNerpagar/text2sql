@@ -12,7 +12,7 @@ from app.services.telemetry_service import configure_telemetry
 
 s=get_settings()
 validate_production_config(s)
-app=FastAPI(title=s.app_name,version="8.4.0",docs_url=None if s.is_production else "/api/docs",openapi_url=None if s.is_production else "/api/openapi.json")
+app=FastAPI(title=s.app_name,version="8.5.0",docs_url=None if s.is_production else "/api/docs",openapi_url=None if s.is_production else "/api/openapi.json")
 app.add_middleware(CORSMiddleware,allow_origins=list(s.cors_origins),allow_credentials=False,allow_methods=["GET","POST","DELETE","OPTIONS"],allow_headers=["Content-Type","Authorization","X-User","X-Roles",s.trusted_roles_header,"X-Market","X-Workspace","X-Amzn-Oidc-Data","X-Amzn-Oidc-Identity"])
 app.include_router(router)
 telemetry_status=configure_telemetry(app)

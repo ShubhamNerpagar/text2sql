@@ -36,7 +36,8 @@ class SemanticRegistryService:
             ident=o['object_id'];binding=o.get('binding',{});sem=o.get('semantics',{})
             asset=assets.get(binding.get('asset_id'));spec={**o,'id':ident}
             if asset:
-                physical={'database':asset['database'],'table':asset['table'],'source_id':asset['source_id'],'status':o['status']}
+                db=asset['database'] if p2.scope(workspace)['source_id']!='federated' else f"{asset['source_id']}::{asset['database']}::{asset.get('schema','')}"
+                physical={'database':db,'physical_database':asset['database'],'table':asset['table'],'asset_id':asset['asset_id'],'source_id':asset['source_id'],'status':o['status']}
                 spec.update(physical)
                 for c in binding['columns']:
                     did=ident+':'+c
@@ -77,9 +78,12 @@ class SemanticRegistryService:
                         if aid not in fingerprints:fingerprints[aid]=p2.metadata(workspace,aid)['fingerprint']
                     trusted=e.get('source_fingerprint')==fingerprints[r['from_asset']] and e.get('target_fingerprint')==fingerprints[r['to_asset']]
                 except Exception:trusted=False
+            multi=p2.scope(workspace)['source_id']=='federated'
+            adb=f"{a['source_id']}::{a['database']}::{a.get('schema','')}" if multi else a['database']
+            bdb=f"{b['source_id']}::{b['database']}::{b.get('schema','')}" if multi else b['database']
             rows.append({**r,'id':r['relationship_id'],'market':workspace,
                 'trusted_for_queries':bool(trusted),
-                'from_db':a['database'],'from_table':a['table'],'to_db':b['database'],'to_table':b['table'],
+                'from_db':adb,'from_table':a['table'],'to_db':bdb,'to_table':b['table'],
                 'source':'semantic_registry','relationship_type':r.get('role','many_to_one')})
         return rows
 

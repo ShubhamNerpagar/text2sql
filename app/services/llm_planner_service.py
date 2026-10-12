@@ -111,6 +111,7 @@ class LLMPlannerService:
             'Filter operators: eq,ne,gt,gte,lt,lte,in,between,is_null,not_null,relative_period. '
             'Relative periods: last_month,this_month,last_year,last_quarter, using the metric declared time column/calendar/timezone. '
             'All metrics must belong to base_asset_id; never repeat a parent metric across child rows. '
+            'Selected datasets can belong to different connectors. Join across connectors only through listed approved relationship IDs; never invent a matching key or connector. '
             'For followups retain all previous fields unless an explicit instruction changes them; put only explicitly changed field names in change_fields. '
             'Changed filters replace constraints on the same asset/column/role; other previous filters are retained. '
             'To explicitly remove a previous filter, include optional intent.remove_filter_indices with its zero-based previous filter index, '

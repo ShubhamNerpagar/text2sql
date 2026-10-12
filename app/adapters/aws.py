@@ -93,7 +93,7 @@ class AwsAdapter:
         text=''.join(c.get('text','') for c in message.get('content',[]) if 'text' in c)
         if not text:raise RuntimeError(f'Bedrock model {model} returned no text')
         return text.strip()
-    def execute_query(self,sql:str,database:str|None=None)->dict:
+    def execute_query(self,sql:str,database:str|None=None,*,row_limit=None,payload_limit=None)->dict:
         ok,msg=validate_read_only_sql(sql)
         if not ok: raise ValueError(msg)
         if not self.s.athena_output: raise RuntimeError("ATHENA_OUTPUT must be configured in APP_MODE=aws")
@@ -110,8 +110,9 @@ class AwsAdapter:
                 raise TimeoutError(f"Athena query {qid} exceeded {self.s.query_timeout_seconds}s and was stopped")
             time.sleep(.7)
         if state!="SUCCEEDED": raise RuntimeError(q["Status"].get("StateChangeReason",state))
-        cols=[]; rows=[]; token=None; first=True
-        while len(rows)<self.s.max_result_rows:
+        cap=self.s.max_result_rows if row_limit is None else row_limit
+        cols=[]; rows=[]; token=None; first=True;payload=0
+        while len(rows)<cap:
             kw={"QueryExecutionId":qid,"MaxResults":1000}
             if token: kw["NextToken"]=token
             r=self.athena.get_query_results(**kw); rs=r.get("ResultSet",{})
@@ -120,8 +121,12 @@ class AwsAdapter:
             if first and page: page=page[1:]; first=False
             for row in page:
                 vals=[d.get("VarCharValue") for d in row.get("Data",[])]; vals += [None]*(len(cols)-len(vals))
-                rows.append(dict(zip(cols,vals[:len(cols)])))
-                if len(rows)>=self.s.max_result_rows: break
+                item=dict(zip(cols,vals[:len(cols)]))
+                if payload_limit is not None:
+                    payload+=len(json.dumps(item,default=str,ensure_ascii=False).encode())
+                    if payload>payload_limit:raise ValueError('FEDERATION_LIMIT_EXCEEDED: Athena payload exceeds snapshot budget')
+                rows.append(item)
+                if len(rows)>=cap: break
             token=r.get("NextToken")
             if not token: break
         stats=q.get("Statistics",{})

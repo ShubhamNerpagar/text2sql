@@ -29,7 +29,7 @@ def test_preflight_rejects_insecure_profiles():
     for override in [dict(security_enabled=False),dict(auth_mode='dev_headers'),
                      dict(allow_dev_identity_headers=True),dict(alb_expected_signer_arn=''),
                      dict(alb_expected_client_id=''),dict(cors_origins=('*',)),
-                     dict(allow_sample_values=True),dict(enable_sample_execution=True),dict(allow_inferred_analytics=True),
+                     dict(allow_sample_values=True),dict(allow_inferred_analytics=True),
                      dict(semantic_bucket='<NAME>'),dict(persist_local_state=True),
                      dict(job_queue_backend='sqlite'),dict(aws_region='eu-west-1'),
                      dict(alb_jwt_public_key_url_template='https://evil.example/{kid}')]:
@@ -47,7 +47,7 @@ def test_header_forgery_and_unsigned_requests_denied_by_perimeter(monkeypatch):
     c=TestClient(main.app)
     if True:
         ok=c.get('/api/health')
-        assert ok.status_code==200 and ok.json()['version']=='8.4.0'
+        assert ok.status_code==200 and ok.json()['version']=='8.5.0'
         denied=c.get('/api/markets',headers={'x-user':'fake','x-roles':'admin'})
         assert denied.status_code==401
         assert 'no-store'==denied.headers['cache-control']

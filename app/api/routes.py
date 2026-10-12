@@ -57,8 +57,8 @@ def safe(call):
 
 @router.get('/health')
 def health():
-    s=get_settings(); base={'ok':True,'app':s.app_name,'version':'8.4.0','mode':s.app_mode,'learning_store':'dynamodb' if s.learning_table else 'local_state','security_enabled':s.security_enabled}
-    if s.is_production: return {'ok':True,'app':s.app_name,'version':'8.4.0'}
+    s=get_settings(); base={'ok':True,'app':s.app_name,'version':'8.5.0','mode':s.app_mode,'learning_store':'dynamodb' if s.learning_table else 'local_state','security_enabled':s.security_enabled}
+    if s.is_production: return {'ok':True,'app':s.app_name,'version':'8.5.0'}
     if s.is_aws:
         try: base['aws']=AwsAdapter().health()
         except Exception as e: base['aws']={'error':str(e)}
@@ -70,7 +70,7 @@ def bootstrap(request:Request):
     ms=[m for m in ms if security.is_admin(u) or security.can(u,'query',m.get('id',''))]
     if default and default not in ms: default=ms[0] if ms else None
     sec=security.summary(u,default['id']) if default else {'user_id':u.user_id,'roles':list(u.roles),'is_admin':security.is_admin(u),'permissions':{}}
-    return {'app':{'name':s.app_name,'version':'8.4.0','mode':s.app_mode,'environment':s.app_env},'markets':ms,'default_market':default,'requires_onboarding':not bool(ms),'stats':dashboard.stats() if security.is_admin(u) else {'tables':len(catalog.tables(market=default['id'])) if default else 0},'databases':catalog.databases(default['id']) if default and not security.is_admin(u) else catalog.databases() if security.is_admin(u) else [],'evaluation':{'latest_score':latest.get('score') if latest and security.is_admin(u) else None,'latest_run_id':latest.get('run_id') if latest and security.is_admin(u) else None},'security':sec,'data_sources':data_sources.sources() if security.is_admin(u) else []}
+    return {'app':{'name':s.app_name,'version':'8.5.0','mode':s.app_mode,'environment':s.app_env},'markets':ms,'default_market':default,'requires_onboarding':not bool(ms),'stats':dashboard.stats() if security.is_admin(u) else {'tables':len(catalog.tables(market=default['id'])) if default else 0},'databases':catalog.databases(default['id']) if default and not security.is_admin(u) else catalog.databases() if security.is_admin(u) else [],'evaluation':{'latest_score':latest.get('score') if latest and security.is_admin(u) else None,'latest_run_id':latest.get('run_id') if latest and security.is_admin(u) else None},'security':sec,'data_sources':data_sources.sources() if security.is_admin(u) else []}
 
 @router.get('/ready')
 def ready():
@@ -528,7 +528,7 @@ class Phase1ScopeRequest(BaseModel):
     scope_id: str = Field(min_length=2,max_length=80)
     workspace_id: str = Field(min_length=2,max_length=80)
     display_name: str = Field(default='',max_length=120)
-    source_id: str
+    source_id: str = ''
     tables: list[dict] = Field(min_length=1,max_length=500)
 
 class Phase1ModelRequest(BaseModel):
@@ -1158,7 +1158,7 @@ def p4_mcp_rpc(body:P4MCPRequest,request:Request,workspace:str):
     rid=body.id
     if body.jsonrpc!='2.0':raise HTTPException(400,'Expected JSON-RPC 2.0')
     if body.method=='initialize':
-        result={'protocolVersion':'2025-06-18','serverInfo':{'name':'dip-governed' ,'version':'8.4.0'},
+        result={'protocolVersion':'2025-06-18','serverInfo':{'name':'dip-governed' ,'version':'8.5.0'},
                 'capabilities':{'tools':{}}}
     elif body.method=='tools/list':
         result={'tools':[{'name':t['name'],'description':t['description'],

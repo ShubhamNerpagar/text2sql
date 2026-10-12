@@ -1,3 +1,11 @@
+## 8.5.0 — Optional samples and combined-source questions
+
+- Restore optional Contoso selection while keeping Bedrock planning and review mandatory. The bundled illustration and optional official SQLBI download are identified separately.
+- Select exact datasets from multiple connectors in one workspace; preserve source identities across browsing, saved scopes, dataset inspection, graph projections and catalog reads.
+- Measure and approve cross-connector relationships and execute supported aggregate joins through bounded transient DuckDB snapshots. Recheck loaded grain, key uniqueness and coverage; refuse incomplete or oversized inputs.
+- Keep one-source questions native and support independent combined-source benchmark SQL through scoped snapshot aliases.
+- Document remaining live-provider/warehouse/Windows acceptance and query limits in VALIDATION_8.5.0.md and docs/PENDING_WORK_8.5.0.md.
+
 ## 8.4.0 — LLM-required business analytics
 
 - Remove offline natural-language answering. Verified Bedrock planning and semantic verification are required; structured HTTP plans are preview-only.

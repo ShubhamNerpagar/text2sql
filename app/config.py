@@ -59,7 +59,10 @@ class Settings:
     persist_local_state: bool = _env_bool("PERSIST_LOCAL_STATE", True)
     allow_inferred_analytics: bool = _env_bool("ALLOW_INFERRED_ANALYTICS", os.getenv("APP_ENV", "development").strip().lower() != "production")
 
-    enable_sample_execution: bool = _env_bool("ENABLE_SAMPLE_EXECUTION", False)
+    enable_sample_execution: bool = _env_bool("ENABLE_SAMPLE_EXECUTION", True)
+    federation_max_rows_per_asset: int = int(os.getenv("FEDERATION_MAX_ROWS_PER_ASSET", "100000"))
+    federation_max_total_rows: int = int(os.getenv("FEDERATION_MAX_TOTAL_ROWS", "400000"))
+    federation_max_payload_bytes: int = int(os.getenv("FEDERATION_MAX_PAYLOAD_BYTES", "67108864"))
 
     security_enabled: bool = _env_bool("SECURITY_ENABLED", True)
     allow_dev_identity_headers: bool = _env_bool("ALLOW_DEV_IDENTITY_HEADERS", os.getenv("APP_ENV", "development").strip().lower() != "production")
@@ -113,7 +116,6 @@ def production_configuration_errors(s: Settings) -> list[str]:
     require(s.alb_jwt_public_key_url_template == 'https://public-keys.auth.elb.{region}.amazonaws.com/{kid}', 'ALB public key endpoint must use the official regional AWS hostname')
     require(bool(s.cors_origins) and all(x.startswith('https://') and '*' not in x and '<' not in x for x in s.cors_origins), 'CORS_ORIGINS must contain concrete HTTPS origins')
     require(not s.allow_sample_values, 'ALLOW_SAMPLE_VALUES must be false')
-    require(not s.enable_sample_execution, 'ENABLE_SAMPLE_EXECUTION must be false')
     require(not s.allow_inferred_analytics, 'ALLOW_INFERRED_ANALYTICS must be false')
     if s.is_aws:
         require(valid(s.semantic_bucket), 'SEMANTIC_BUCKET must be configured')

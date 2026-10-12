@@ -144,18 +144,27 @@ class OnboardingService:
                 if not name or name.lower().startswith(_IGNORE_PREFIX): continue
                 cols.append({**raw,'semantic_type':raw.get('semantic_type') or infer_semantic_type(name,raw.get('type','string'),[])}); column_count+=1
             previous=dd.get(db,{}).get(table,{}) or {}; memberships=set(previous.get('workspace_ids') or ([previous.get('market')] if previous.get('market') else [])); memberships.add(workspace_id)
-            dd.setdefault(db,{})[table]={'name':table,'description':obj.get('description','') or previous.get('description',''),'location':obj.get('location','') or previous.get('location',''),'columns':cols,'synced_from':source_id,'synced_at':now,'workspace_ids':sorted(memberships),'market':workspace_id if len(memberships)==1 else None,'source_id':source_id}; table_count+=1
+            actual_source=obj.get('source_id') or source_id
+            dd.setdefault(db,{})[table]={'name':table,'description':obj.get('description','') or previous.get('description',''),'location':obj.get('location','') or previous.get('location',''),'columns':cols,'synced_from':actual_source,'synced_at':now,'workspace_ids':sorted(memberships),'market':workspace_id if len(memberships)==1 else None,'source_id':actual_source,'physical_database':obj.get('physical_database',db),'schema':obj.get('schema','')}; table_count+=1
         meta=ont.setdefault('ontology',{}); meta.update({'version':'7.0.1','source':'runtime-generated','table_count':sum(len(x) for x in dd.values()),'column_count':sum(len(t.get('columns',[])) for db in dd.values() for t in db.values()),'last_updated':now})
         self.repo.save_ontology(ont); return table_count,column_count
 
     def bootstrap_source(self,source_id,workspace_id,display_name=None,schemas=None,discover_relationships=True,preserve_existing=True,discovery=None,scope_id=None):
-        if source_id not in {x['id'] for x in self.sources.sources()} | {'contoso'}: raise ValueError(f'Unsupported data source: {source_id}')
+        if source_id not in {x['id'] for x in self.sources.sources()} | {'contoso','federated'}: raise ValueError(f'Unsupported data source: {source_id}')
         discovery=discovery if discovery is not None else self.sources.discover(source_id,schemas); wid=_workspace_id(workspace_id)
         if not discovery.get('objects'): raise ValueError('No tables were discovered. Check connector credentials, database/schema scope and network access.')
         old_record=self.control.get('WORKSPACE',wid) or {}; old_ctx=deepcopy(old_record.get('semantic_context',{})); old_snapshot=old_record.get('catalog_snapshot',{}) or {}
-        new_snapshot=self._snapshot(discovery); drift=self._drift(old_snapshot,new_snapshot) if old_snapshot else []
-        table_count,column_count=self._save_ontology(wid,source_id,discovery)
-        ctx=self._build_context(wid,display_name or (old_ctx.get('market',{}) or {}).get('name') or _label(wid),source_id,discovery); suggestions=ctx.pop('_metric_suggestions',[])
+        projection=deepcopy(discovery)
+        source_ids=sorted({o.get('source_id') or source_id for o in discovery['objects']})
+        if source_id=='federated':
+            for obj in projection['objects']:
+                obj['physical_database']=obj['database']
+                obj['database']=f"{obj['source_id']}::{obj['database']}::{obj.get('schema','')}"
+        new_snapshot=self._snapshot(projection); drift=self._drift(old_snapshot,new_snapshot) if old_snapshot else []
+        table_count,column_count=self._save_ontology(wid,source_id,projection)
+        ctx=self._build_context(wid,display_name or (old_ctx.get('market',{}) or {}).get('name') or _label(wid),source_id,projection); suggestions=ctx.pop('_metric_suggestions',[])
+        ctx['data_sources']['supported']=source_ids
+        ctx['market']['source_ids']=source_ids
         if preserve_existing and old_ctx: ctx=self._preserve_steward(old_ctx,ctx)
         self.markets.save_workspace(wid,ctx,source_id=source_id,source_scope=discovery.get('scope',[]),status=old_record.get('status','draft'))
         record=self.control.get('WORKSPACE',wid) or {}; record['catalog_snapshot']=new_snapshot; record['schema_drift']=drift; record['last_synced_at']=datetime.now(timezone.utc).isoformat(); self.control.put('WORKSPACE',wid,record)

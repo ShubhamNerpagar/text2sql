@@ -160,7 +160,7 @@ class Phase5Service:
         return row
     def benchmark(self,w,source_id,schemas=None):
         sc=self._scope(w)
-        if source_id!=sc['source_id']:
+        if source_id not in sc.get('source_ids',[sc['source_id']]):
             raise ValueError('Connector benchmark must use the workspace selected source')
         src=next((x for x in self.sources.sources() if x['id']==source_id),None)
         if not src or not src['configured']:raise ValueError('Source not configured')
@@ -169,6 +169,7 @@ class Phase5Service:
             sample=ContosoSampleService()
             rows=[]
             for t in sc['tables'][:20]:
+                if t.get('source_id',sc['source_id'])!=source_id:continue
                 table=t['table'];db=t['database']
                 detail=sample.table_details(table,db)
                 # Compare two independently executed bounded aggregate readers.
@@ -183,11 +184,11 @@ class Phase5Service:
             scope='offline_contoso_aggregate_and_schema'
         else:
             # Explicit schema list: avoid broad warehouse scans and arbitrary SQL.
-            allowed={x['schema'] for x in sc['tables']}
+            allowed={x['schema'] for x in sc['tables'] if x.get('source_id',sc['source_id'])==source_id}
             if not schemas or not set(schemas).issubset(allowed):
                 raise ValueError('Connector benchmark needs explicit selected schema allowlist')
             discovered=self.sources.discover(source_id,schemas)
-            selected={(x['schema'],x['table']) for x in sc['tables']}
+            selected={(x['schema'],x['table']) for x in sc['tables'] if x.get('source_id',sc['source_id'])==source_id}
             rows=[{'table':d['table'],'schema':d['schema'],
                    'column_count':len(d['columns']),'in_selected_scope':(d['schema'],d['table']) in selected}
                   for d in discovered['objects'] if (d['schema'],d['table']) in selected][:100]
@@ -211,7 +212,8 @@ class Phase5Service:
             self.p4.release(w,str(p.get('release_id','')))
             p={'release_id':p['release_id'],'mutations':bool(p.get('mutations',True))}
         elif task=='connector_benchmark':
-            if p.get('source_id')!=self._scope(w)['source_id']:raise ValueError('Connector outside selected scope')
+            selected=self._scope(w)
+            if p.get('source_id') not in selected.get('source_ids',[selected['source_id']]):raise ValueError('Connector outside selected scope')
             schemas=p.get('schemas') or []
             if not isinstance(schemas,list) or len(schemas)>10 or not all(isinstance(x,str) for x in schemas):raise ValueError('Invalid schemas')
             p={'source_id':p['source_id'],'schemas':schemas}

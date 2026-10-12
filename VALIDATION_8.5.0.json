@@ -1,0 +1,39 @@
+{
+  "version": "8.5.0",
+  "automated_tests": {
+    "passed": 204,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 169.75,
+    "command": "python -m pytest -q"
+  },
+  "browser": {
+    "version": "8.5.0",
+    "status": "passed",
+    "checks": [
+      "Source selection starts with no connector or dataset selected",
+      "Datasets remain selected when browsing another connector",
+      "Saved workspace scope contains both connector identities and exact datasets",
+      "Reloading a mixed-source selection restores both connectors",
+      "Contoso can be deselected while the users own source remains selected",
+      "Dataset inspector selects a source-bound asset identity",
+      "Follow-up combines PostgreSQL and Contoso with correct results and preserved metric",
+      "Benchmark authoring explains scoped cross-source SQL table aliases",
+      "Selecting sample data or multiple sources does not enable Ask without a verified model",
+      "The missing-model connection button opens AI model settings"
+    ],
+    "page_errors": [],
+    "provider": "mocked Bedrock",
+    "sources": "SQLAlchemy/SQLite and bundled Contoso",
+    "live_bedrock_tested": false,
+    "live_enterprise_warehouses_tested": false
+  },
+  "live_bedrock_tested": false,
+  "live_enterprise_warehouses_tested": false,
+  "native_windows_tested": false,
+  "bundled_contoso_tables": 8,
+  "bundled_orders": 10000,
+  "official_contoso_installed": false,
+  "official_release_lookup": "network proxy returned HTTP 403",
+  "scope": "Optional sample selection and reviewed, bounded cross-connector aggregate queries"
+}

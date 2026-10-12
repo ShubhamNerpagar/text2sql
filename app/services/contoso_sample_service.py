@@ -3,7 +3,7 @@ not an unmodified SQLBI release. Optional official SQLBI CSV installer replaces 
 """
 from __future__ import annotations
 from pathlib import Path
-import sqlite3
+import json,sqlite3
 from app.config import BASE_DIR
 
 SAMPLE_DIR=BASE_DIR/'sample-data'/'contoso'
@@ -34,7 +34,7 @@ class ContosoSampleService:
         return {'source_id':'contoso','database':database,'schema':'public','table':table,'columns':cols,'foreign_keys':list(groups.values()),'sample_rows_used':False}
     def metadata(self):
         return {'package':'Contoso retail illustration','source':'bundled synthetic demonstration; NOT the official SQLBI dataset','tables':self.table_names(), 'sqlbi_download':'https://github.com/sql-bi/Contoso-Data-Generator-V2-Data/releases/tag/ready-to-use-data','sample_rows_used':False}
-    def execute(self,sql,limit=5000,database=None):
+    def execute(self,sql,limit=5000,database=None,*,payload_limit=None):
         database=database or 'contoso_official' if self.path.name=='contoso_official.sqlite3' else database or 'contoso_demo'
         self.set_dataset(database)
         from app.services.sql_safety import validate_read_only_sql
@@ -46,5 +46,13 @@ class ContosoSampleService:
             db.execute('ATTACH DATABASE ? AS '+database,(str(self.path),))
             db.execute('PRAGMA query_only=ON')
             cur=db.execute(sql); columns=[c[0] for c in (cur.description or [])]
-            rows=[dict(zip(columns,r)) for r in cur.fetchmany(limit)]
+            rows=[];payload=0
+            while len(rows)<limit:
+                row=cur.fetchone()
+                if row is None:break
+                item=dict(zip(columns,row))
+                if payload_limit is not None:
+                    payload+=len(json.dumps(item,default=str,ensure_ascii=False).encode())
+                    if payload>payload_limit:raise ValueError('FEDERATION_LIMIT_EXCEEDED: Contoso payload exceeds snapshot budget')
+                rows.append(item)
         return {'query_id':'local-contoso','columns':columns,'rows':rows,'row_count':len(rows),'execution_ms':int((time.monotonic()-start)*1000),'bytes_scanned':None,'truncated':len(rows)==limit}

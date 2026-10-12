@@ -6,6 +6,7 @@ pydantic==2.13.4
 PyYAML==6.0.3
 tzdata>=2025.2,<2027
 filelock>=3.18,<4
+duckdb>=1.2,<2
 
 SQLAlchemy>=2.0,<3
 psycopg[binary]>=3.2,<4

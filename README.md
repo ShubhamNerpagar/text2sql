@@ -1,8 +1,8 @@
-# Data Intelligence Platform 8.4.0
+# Data Intelligence Platform 8.5.0
 
 A Windows-native Python/FastAPI application for discovering warehouse metadata, defining governed business concepts and metrics, asking analytical questions with Amazon Bedrock, and publishing reports.
 
-**New questions require a verified LLM. Offline answering has been removed.** Browsing metadata and reviewing definitions do not require an LLM. Synthetic Contoso execution is disabled by default and retained for explicit automated test fixtures.
+**New questions require a verified LLM. Offline answering has been removed.** Browsing metadata and reviewing definitions do not require an LLM. The bundled Contoso source is optional: users can select it, their own configured connectors, or both. Selecting sample data still requires verified LLM access for questions.
 
 ## Start and connect
 
@@ -33,7 +33,7 @@ Reports store an LLM-reviewed plan and its release. Refresh recompiles that save
 
 ## Before the first question
 
-1. Connect and explicitly scope the tables in **Data → Catalog Explorer**.
+1. Select one or more connectors and explicitly scope their tables in **Data → Catalog Explorer**. Contoso can be left unchecked.
 2. Open **Administration → Onboarding** and prepare profiles, contract drafts and business-definition proposals.
 3. Confirm metric formula, unit, grain, required predicates, time meaning and synonyms in **Ontology → Object Studio**. Define executable predicates for concepts such as “completed order.”
 4. Review contracts and measured relationships. A different steward certifies authored ontology objects.
@@ -53,9 +53,9 @@ python -m venv .venv
 APP_MODE=local .venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-For Windows, use `.venv\Scripts\python.exe`. Start background jobs with `windows\Start-Worker.ps1`; it also refreshes expired semantic evidence. [VALIDATION_8.4.0.md](VALIDATION_8.4.0.md) records the checks performed on this version. Earlier QA files and screenshots describe historical versions and are not evidence for 8.4.0.
+For Windows, use `.venv\Scripts\python.exe`. Start background jobs with `windows\Start-Worker.ps1`; it also refreshes expired semantic evidence. [VALIDATION_8.4.0.md](VALIDATION_8.4.0.md) records the historical 8.4.0 checks. [VALIDATION_8.5.0.md](VALIDATION_8.5.0.md) records the current checks. Earlier QA files and screenshots describe historical versions and are not evidence for 8.4.0.
 
-The implementation supports bounded aggregate queries on a single source/database, up to four directional joins, eight metrics and dimensions, and 100 result rows. Cross-source joins, unrestricted SQL, window functions, unsupported fiscal calendars and raw-row extraction are refused. Relative periods use approved time roles; timestamp grouping outside UTC requires an explicit timezone conversion definition and is refused by the current compiler.
+The implementation supports bounded aggregate queries across selected connectors through approved relationships, up to four directional joins, eight metrics and dimensions, and 100 result rows. Single-source questions execute natively; mixed-source questions use temporary DuckDB snapshots with default limits of 100,000 rows per asset, 400,000 total rows and a 64 MiB payload budget. Oversized/incomplete snapshots, unrestricted SQL, window functions, unsupported fiscal calendars and raw-row extraction are refused. Independent fact metrics with different grains need additional compilation strategies. Relative periods use approved time roles; timestamp grouping outside UTC requires an explicit timezone conversion definition and is refused by the current compiler.
 
 LLM review reduces interpretation errors; it cannot prove a business definition is correct. Reference benchmarks and steward review remain necessary. Roles with active row policies or restricted semantic columns are denied until an appropriate policy compiler is available. Use read-only warehouse credentials and the existing production profile/ALB/OIDC deployment controls. This source release has not been accepted on live Bedrock, live enterprise warehouses or Windows EC2 in this environment.
 
@@ -67,6 +67,8 @@ LLM review reduces interpretation errors; it cannot prove a business definition 
 
 ## UI walkthrough and pending work
 
-- [Open the UI walkthrough guide](docs/UI_WALKTHROUGH_8.4.0.md). Download its standalone HTML file and open it in a browser to follow nine actual application screens. The example uses demonstration data and mocked model responses.
-- [Review the pending-work audit](docs/PENDING_WORK_8.4.0.md), including Windows acceptance script fixes, live Bedrock/warehouse validation, policy-aware compilation and the Ask-to-report UI handoff.
+- [Open the UI walkthrough guide](docs/UI_WALKTHROUGH_8.5.0.md). Follow the current optional-source and combined-query screens; the older standalone 8.4.0 tour remains available as historical context. The example uses demonstration data and mocked model responses.
+- [Review the pending-work audit](docs/PENDING_WORK_8.5.0.md), including Windows acceptance script fixes, live Bedrock/warehouse validation, policy-aware compilation and the Ask-to-report UI handoff.
 - [Read recorded validation](VALIDATION_8.4.0.md). Passing mocked integration tests does not establish live model accuracy.
+
+[Optional Contoso and multi-connector workflow](docs/MULTI_CONNECTOR_WORKFLOW.md) explains included data, source selection, combined execution, limits and reference benchmarks.

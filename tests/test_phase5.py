@@ -43,7 +43,7 @@ def prepared():
     return {'w':W,'other':O,'asset':a,'obj':obj,'release':release['release_id'],'p2':p2}
 
 def test_status_and_guard(prepared):
-    assert c.get('/api/health').json()['version']=='8.4.0'
+    assert c.get('/api/health').json()['version']=='8.5.0'
     assert c.get(u('overview'),headers=ADMIN).json()['worker_backend']=='sqlite_single_host'
     assert c.get(u('overview'),headers=ANALYST).status_code==403
     assert c.get(u('overview',O),headers=ADMIN).status_code==200
