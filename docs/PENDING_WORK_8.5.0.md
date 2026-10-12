@@ -11,7 +11,7 @@ An audit is a record of remaining implementation and acceptance work. It does no
 - Native questions remain native; incomplete/oversized snapshots and invalid relationships/grain are blocked. Source rows are not sent to the LLM.
 - Independent cross-source reference benchmarks use explicit source-bound snapshot table aliases.
 
-The bundled Contoso illustration already exists. The official SQLBI export is separate, is not installed in this checkout, and has an included installer. See [the dataset and connector workflow](MULTI_CONNECTOR_WORKFLOW.md).
+The bundled Contoso illustration already exists. On 2026-10-12, the official SQLBI CSV 10K export was also downloaded, checksum-verified and installed locally. Typed archive importing, named optional dataset discovery and a public-release fallback were added; malformed rows no longer disappear silently. Installation does not certify business definitions. See [the dataset review](CONTOSO_DATASET_REVIEW.md) and [the dataset and connector workflow](MULTI_CONNECTOR_WORKFLOW.md).
 
 ## Remaining implementation work
 
@@ -22,7 +22,7 @@ The bundled Contoso illustration already exists. The official SQLBI export is se
 5. **Source freshness SLAs:** the contract field is stored; enforcing source-watermark freshness remains pending. Relationship/grain evidence refresh is implemented.
 6. **Connection instances and large-data federation:** the provider registry has one configured connection per type. Separately named instances and warehouse-side federation/pushdown for large inputs are further work.
 7. **Additional calculation strategies:** independent facts with different grains/populations, fiscal calendars and unsupported local-time operations.
-8. **Official CSV typing:** the optional official installer currently preserves CSV columns as TEXT. Numeric metric certification on that imported variant needs a typed import/conversion; the bundled illustration already has numeric physical types. This does not affect the existing bundled sample or native typed enterprise data.
+8. **Exact financial precision:** typed CSV imports now work; SQLite REAL remains binary floating point. Exact decimal financial arithmetic across native/federated execution needs a precision-preserving strategy and result benchmarks.
 
 ## Remaining setup and acceptance work
 

@@ -71,9 +71,8 @@ class EnterpriseCatalogService:
 
     def databases(self,source,catalog='',q='',limit=50,cursor=None):
         if source=='contoso':
-            from app.services.contoso_sample_service import SAMPLE_DIR
-            names=['contoso_demo']
-            if (SAMPLE_DIR/'contoso_official.sqlite3').is_file():names.append('contoso_official')
+            from app.services.contoso_sample_service import installed_datasets
+            names=[item['database'] for item in installed_datasets()]
             return self._paginate(names,q,limit,cursor)
         if source=='athena':
             if catalog and catalog!=self.s.athena_catalog: raise ValueError('Only configured Glue catalog supported in this deployment')

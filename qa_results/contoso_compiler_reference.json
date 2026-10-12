@@ -1,0 +1,151 @@
+{
+  "dataset": "contoso_official",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "net_sales_usd",
+      "reference_sql": "SELECT SUM(Quantity*NetPrice/ExchangeRate) FROM sales",
+      "result": [
+        [
+          4381353.315881513
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "units",
+      "reference_sql": "SELECT SUM(Quantity) FROM sales",
+      "result": [
+        [
+          12534
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "order_count",
+      "reference_sql": "SELECT COUNT(DISTINCT OrderKey) FROM sales",
+      "result": [
+        [
+          1681
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "average_order_value_usd",
+      "reference_sql": "SELECT SUM(Quantity*NetPrice/ExchangeRate)/COUNT(DISTINCT OrderKey) FROM sales",
+      "result": [
+        [
+          2606.39697553927
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "sales_by_customer_country",
+      "reference_sql": "SELECT c.CountryFull,SUM(s.Quantity*s.NetPrice/s.ExchangeRate) FROM sales s LEFT JOIN customer c ON s.CustomerKey=c.CustomerKey GROUP BY c.CountryFull",
+      "result": [
+        [
+          "Australia",
+          129702.41715115863
+        ],
+        [
+          "Canada",
+          279730.65527447645
+        ],
+        [
+          "France",
+          127851.71257160555
+        ],
+        [
+          "Germany",
+          401169.45298547635
+        ],
+        [
+          "Italy",
+          175399.24463529588
+        ],
+        [
+          "Netherlands",
+          191772.51736426662
+        ],
+        [
+          "United Kingdom",
+          579505.2233202338
+        ],
+        [
+          "United States",
+          2496222.092579
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "sales_by_order_year",
+      "reference_sql": "SELECT d.Year,SUM(s.Quantity*s.NetPrice/s.ExchangeRate) FROM sales s LEFT JOIN date d ON s.OrderDate=d.Date GROUP BY d.Year",
+      "result": [
+        [
+          2022,
+          265607.1818897433
+        ],
+        [
+          2023,
+          1274282.064151681
+        ],
+        [
+          2024,
+          1743164.2640455964
+        ],
+        [
+          2025,
+          840297.1162559277
+        ],
+        [
+          2026,
+          258002.6895385647
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "sales_by_delivery_year",
+      "reference_sql": "SELECT d.Year,SUM(s.Quantity*s.NetPrice/s.ExchangeRate) FROM sales s LEFT JOIN date d ON s.DeliveryDate=d.Date GROUP BY d.Year",
+      "result": [
+        [
+          2022,
+          263865.9277355636
+        ],
+        [
+          2023,
+          1267643.757759072
+        ],
+        [
+          2024,
+          1736496.1245923853
+        ],
+        [
+          2025,
+          855281.6511269109
+        ],
+        [
+          2026,
+          258065.85466758153
+        ]
+      ],
+      "status": "passed"
+    },
+    {
+      "name": "sales_2024",
+      "reference_sql": "SELECT SUM(Quantity*NetPrice/ExchangeRate) FROM sales WHERE OrderDate BETWEEN '2024-01-01' AND '2024-12-31'",
+      "result": [
+        [
+          1743164.2640455964
+        ]
+      ],
+      "status": "passed"
+    }
+  ],
+  "live_llm_tested": false,
+  "approvals": "Isolated test fixture only; no deployment business meaning was certified"
+}

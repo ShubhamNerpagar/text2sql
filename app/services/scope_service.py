@@ -26,7 +26,8 @@ class ScopeService:
             if table_source not in SUPPORTED:raise ValueError('Each selected table requires a supported connector')
             db=str(obj.get('database') or '').strip();cat=str(obj.get('catalog') or '').strip();sch=str(obj.get('schema') or '').strip();name=safe_identifier(obj.get('table'))
             if table_source=='contoso':
-                if db not in {'contoso_demo','contoso_official'}:raise ValueError('Invalid Contoso dataset')
+                from app.services.contoso_sample_service import installed_datasets
+                if db not in {item['database'] for item in installed_datasets()}:raise ValueError('Invalid Contoso dataset')
                 sch='public';cat='Bundled Sample'
             elif table_source=='athena':
                 safe_identifier(db);cat=cat or self.catalog.s.athena_catalog

@@ -19,3 +19,13 @@ logs/
 .venvs/
 .coverage
 htmlcov/
+
+# Imported sample archives and databases stay local; keep the small bundled demo.
+sample-data/contoso/*.7z
+sample-data/contoso/*.partial
+sample-data/contoso/*.sqlite3
+!sample-data/contoso/contoso_demo.sqlite3
+sample-data/contoso/*.manifest.json
+sample-data/contoso/official-manifest.json
+sample-data/contoso/official_csv/
+sample-data/contoso/.contoso-import*

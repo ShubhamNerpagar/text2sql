@@ -72,3 +72,5 @@ LLM review reduces interpretation errors; it cannot prove a business definition 
 - [Read recorded validation](VALIDATION_8.4.0.md). Passing mocked integration tests does not establish live model accuracy.
 
 [Optional Contoso and multi-connector workflow](docs/MULTI_CONNECTOR_WORKFLOW.md) explains included data, source selection, combined execution, limits and reference benchmarks.
+
+[Official SQLBI CSV 10K review and installation](docs/CONTOSO_DATASET_REVIEW.md) records the verified download, actual table counts, key/grain checks, currency formulas and local `.7z` imports. Run `windows/Install-Contoso.ps1` to install the official optional dataset on another machine; imported databases are excluded from Git.

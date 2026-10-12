@@ -1,0 +1,2 @@
+# Optional: only needed when importing a CSV .7z archive, not to query an installed dataset.
+py7zr>=1.1,<2

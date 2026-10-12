@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "checks": [
+    "Sample selection is optional and begins unchecked",
+    "Bundled demo and installed official SQLBI dataset appear separately",
+    "Selections persist across multiple Contoso datasets",
+    "Save and reload retain source-bound selections from both datasets",
+    "Users can remove every sample dataset by unchecking Contoso"
+  ],
+  "page_errors": [],
+  "dataset": "official SQLBI CSV 10K, checksum verified",
+  "live_llm_tested": false
+}

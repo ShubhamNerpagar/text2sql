@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-12",
+  "status": "passed",
+  "full_suite": {
+    "passed": 227,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 233.94,
+    "command": "python -m pytest -q"
+  },
+  "new_archive_import_tests": 23,
+  "browser_checks": 5,
+  "browser_page_errors": [],
+  "actual_sqlbi_compiler_reference_checks": 8,
+  "official_downloader_end_to_end": {
+    "status": "passed",
+    "actual_download": true,
+    "published_checksum_verified": true,
+    "total_rows": 164730
+  },
+  "local_archive_cli": {
+    "status": "passed",
+    "published_checksum_verified": true,
+    "total_rows": 164730
+  },
+  "installed_dataset": "contoso_official",
+  "optional_sample_selection_preserved": true,
+  "syntax_and_whitespace_checks": "passed",
+  "live_llm_tested": false,
+  "native_windows_tested": false,
+  "uploaded_1m_archives_inspected": false,
+  "business_approval_note": "Compiler/reference checks used isolated fixture approvals, not deployment approval.",
+  "cloud_config": {
+    "install_script": "saved as draft",
+    "start_skill": "saved as draft",
+    "published": false
+  }
+}

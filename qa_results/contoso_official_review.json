@@ -1,0 +1,834 @@
+{
+  "review_date": "2026-10-12",
+  "reviewed_source": "https://github.com/sql-bi/Contoso-Data-Generator-V2-Data/releases/download/ready-to-use-data/csv-10k.7z",
+  "uploaded_1m_archives_inspected": false,
+  "attachment_limit": "32 MiB workspace transfer limit",
+  "chosen_version": "CSV 10K",
+  "archive_sha256": "68b9d2bebd958ac8365b90e19937f7764289372e15b1006a3138bd2535871c67",
+  "published_checksum_verified": true,
+  "dataset_id": "contoso_official",
+  "total_rows": 164730,
+  "database_bytes": 30101504,
+  "tables": {
+    "currencyexchange": {
+      "rows": 45650,
+      "columns": [
+        {
+          "name": "Date",
+          "source_name": "Date",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "FromCurrency",
+          "source_name": "FromCurrency",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ToCurrency",
+          "source_name": "ToCurrency",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Exchange",
+          "source_name": "Exchange",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        }
+      ],
+      "source_file": "currencyexchange.csv"
+    },
+    "customer": {
+      "rows": 104990,
+      "columns": [
+        {
+          "name": "CustomerKey",
+          "source_name": "CustomerKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "GeoAreaKey",
+          "source_name": "GeoAreaKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "StartDT",
+          "source_name": "StartDT",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "EndDT",
+          "source_name": "EndDT",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Continent",
+          "source_name": "Continent",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Gender",
+          "source_name": "Gender",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Title",
+          "source_name": "Title",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "GivenName",
+          "source_name": "GivenName",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "MiddleInitial",
+          "source_name": "MiddleInitial",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "Surname",
+          "source_name": "Surname",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "StreetAddress",
+          "source_name": "StreetAddress",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "City",
+          "source_name": "City",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "State",
+          "source_name": "State",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "StateFull",
+          "source_name": "StateFull",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ZipCode",
+          "source_name": "ZipCode",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "Country",
+          "source_name": "Country",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CountryFull",
+          "source_name": "CountryFull",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Birthday",
+          "source_name": "Birthday",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Age",
+          "source_name": "Age",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Occupation",
+          "source_name": "Occupation",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Company",
+          "source_name": "Company",
+          "type": "TEXT",
+          "null_count": 105,
+          "mixed_types": false
+        },
+        {
+          "name": "Vehicle",
+          "source_name": "Vehicle",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Latitude",
+          "source_name": "Latitude",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Longitude",
+          "source_name": "Longitude",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": false
+        }
+      ],
+      "source_file": "customer.csv"
+    },
+    "date": {
+      "rows": 1826,
+      "columns": [
+        {
+          "name": "Date",
+          "source_name": "Date",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "DateKey",
+          "source_name": "DateKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Year",
+          "source_name": "Year",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "YearQuarter",
+          "source_name": "YearQuarter",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "YearQuarterNumber",
+          "source_name": "YearQuarterNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Quarter",
+          "source_name": "Quarter",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "YearMonth",
+          "source_name": "YearMonth",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "YearMonthShort",
+          "source_name": "YearMonthShort",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "YearMonthNumber",
+          "source_name": "YearMonthNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Month",
+          "source_name": "Month",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "MonthShort",
+          "source_name": "MonthShort",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "MonthNumber",
+          "source_name": "MonthNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "DayofWeek",
+          "source_name": "DayofWeek",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "DayofWeekShort",
+          "source_name": "DayofWeekShort",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "DayofWeekNumber",
+          "source_name": "DayofWeekNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "WorkingDay",
+          "source_name": "WorkingDay",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "WorkingDayNumber",
+          "source_name": "WorkingDayNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        }
+      ],
+      "source_file": "date.csv"
+    },
+    "orderrows": {
+      "rows": 3996,
+      "columns": [
+        {
+          "name": "OrderKey",
+          "source_name": "OrderKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "LineNumber",
+          "source_name": "LineNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ProductKey",
+          "source_name": "ProductKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Quantity",
+          "source_name": "Quantity",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "UnitPrice",
+          "source_name": "UnitPrice",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "NetPrice",
+          "source_name": "NetPrice",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "UnitCost",
+          "source_name": "UnitCost",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        }
+      ],
+      "source_file": "orderrows.csv"
+    },
+    "orders": {
+      "rows": 1681,
+      "columns": [
+        {
+          "name": "OrderKey",
+          "source_name": "OrderKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CustomerKey",
+          "source_name": "CustomerKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "StoreKey",
+          "source_name": "StoreKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "OrderDate",
+          "source_name": "OrderDate",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "DeliveryDate",
+          "source_name": "DeliveryDate",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CurrencyCode",
+          "source_name": "CurrencyCode",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        }
+      ],
+      "source_file": "orders.csv"
+    },
+    "product": {
+      "rows": 2517,
+      "columns": [
+        {
+          "name": "ProductKey",
+          "source_name": "ProductKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ProductCode",
+          "source_name": "ProductCode",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ProductName",
+          "source_name": "ProductName",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Manufacturer",
+          "source_name": "Manufacturer",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Brand",
+          "source_name": "Brand",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Color",
+          "source_name": "Color",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "WeightUnit",
+          "source_name": "WeightUnit",
+          "type": "TEXT",
+          "null_count": 222,
+          "mixed_types": false
+        },
+        {
+          "name": "Weight",
+          "source_name": "Weight",
+          "type": "REAL",
+          "null_count": 284,
+          "mixed_types": true
+        },
+        {
+          "name": "Cost",
+          "source_name": "Cost",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "Price",
+          "source_name": "Price",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "CategoryKey",
+          "source_name": "CategoryKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CategoryName",
+          "source_name": "CategoryName",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "SubCategoryKey",
+          "source_name": "SubCategoryKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "SubCategoryName",
+          "source_name": "SubCategoryName",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        }
+      ],
+      "source_file": "product.csv"
+    },
+    "sales": {
+      "rows": 3996,
+      "columns": [
+        {
+          "name": "OrderKey",
+          "source_name": "OrderKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "LineNumber",
+          "source_name": "LineNumber",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "OrderDate",
+          "source_name": "OrderDate",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "DeliveryDate",
+          "source_name": "DeliveryDate",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CustomerKey",
+          "source_name": "CustomerKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "StoreKey",
+          "source_name": "StoreKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ProductKey",
+          "source_name": "ProductKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "Quantity",
+          "source_name": "Quantity",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "UnitPrice",
+          "source_name": "UnitPrice",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "NetPrice",
+          "source_name": "NetPrice",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "UnitCost",
+          "source_name": "UnitCost",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": true
+        },
+        {
+          "name": "CurrencyCode",
+          "source_name": "CurrencyCode",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "ExchangeRate",
+          "source_name": "ExchangeRate",
+          "type": "REAL",
+          "null_count": 0,
+          "mixed_types": false
+        }
+      ],
+      "source_file": "sales.csv"
+    },
+    "store": {
+      "rows": 74,
+      "columns": [
+        {
+          "name": "StoreKey",
+          "source_name": "StoreKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "StoreCode",
+          "source_name": "StoreCode",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "GeoAreaKey",
+          "source_name": "GeoAreaKey",
+          "type": "INTEGER",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CountryCode",
+          "source_name": "CountryCode",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CountryName",
+          "source_name": "CountryName",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "State",
+          "source_name": "State",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "OpenDate",
+          "source_name": "OpenDate",
+          "type": "DATE",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "CloseDate",
+          "source_name": "CloseDate",
+          "type": "DATE",
+          "null_count": 58,
+          "mixed_types": false
+        },
+        {
+          "name": "Description",
+          "source_name": "Description",
+          "type": "TEXT",
+          "null_count": 0,
+          "mixed_types": false
+        },
+        {
+          "name": "SquareMeters",
+          "source_name": "SquareMeters",
+          "type": "INTEGER",
+          "null_count": 1,
+          "mixed_types": false
+        },
+        {
+          "name": "Status",
+          "source_name": "Status",
+          "type": "TEXT",
+          "null_count": 59,
+          "mixed_types": false
+        }
+      ],
+      "source_file": "store.csv"
+    }
+  },
+  "full_table_relationship_and_grain_checks": {
+    "sales_line_duplicate_groups": [
+      [
+        0
+      ]
+    ],
+    "orderrows_line_duplicate_groups": [
+      [
+        0
+      ]
+    ],
+    "customer_key_duplicate_groups": [
+      [
+        0
+      ]
+    ],
+    "orders_key_duplicate_groups": [
+      [
+        0
+      ]
+    ],
+    "sales_missing_customer": [
+      [
+        0
+      ]
+    ],
+    "sales_missing_product": [
+      [
+        0
+      ]
+    ],
+    "sales_missing_store": [
+      [
+        0
+      ]
+    ],
+    "sales_missing_orders": [
+      [
+        0
+      ]
+    ],
+    "sales_mismatched_order_fields": [
+      [
+        0
+      ]
+    ],
+    "sales_mismatched_line_fields": [
+      [
+        0
+      ]
+    ],
+    "fx_key_duplicate_groups": [
+      [
+        0
+      ]
+    ],
+    "sales_negative_quantity": [
+      [
+        0
+      ]
+    ],
+    "date_range": [
+      [
+        "2022-01-01",
+        "2026-12-31"
+      ]
+    ],
+    "sales_rate_matches_usd_to_local": [
+      [
+        3996
+      ]
+    ],
+    "sales_rate_matches_local_to_usd": [
+      [
+        2199
+      ]
+    ],
+    "sales_missing_fx": [
+      [
+        0
+      ]
+    ]
+  },
+  "reference_aggregates": {
+    "sales_lines": 3996,
+    "distinct_orders": 1681,
+    "active_customers": 1663,
+    "units": 12534,
+    "net_sales_usd": 4381353.315881513,
+    "gross_sales_usd": 4667254.33737071,
+    "gross_profit_usd": 2434213.156474003,
+    "min_exchange_rate": 0.76277,
+    "max_exchange_rate": 1.58361,
+    "null_delivery_dates": 0,
+    "currency_count": 5,
+    "sales_null_line_keys": 0
+  },
+  "deployment_business_definitions_approved": false,
+  "live_llm_tested": false,
+  "precision": "SQLite REAL; binary floating point"
+}

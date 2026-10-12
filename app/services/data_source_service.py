@@ -8,10 +8,11 @@ class DataSourceService:
     def __init__(self): self.s=get_settings()
 
     def sources(self):
-        from app.services.contoso_sample_service import SAMPLE_DIR
-        sample_available=any((SAMPLE_DIR/name).is_file() for name in ('contoso_demo.sqlite3','contoso_official.sqlite3'))
+        from app.services.contoso_sample_service import installed_datasets
+        datasets=installed_datasets()
+        sample_available=bool(datasets)
         return [
-            {'id':'contoso','label':'Contoso sample (optional)','configured':self.s.enable_sample_execution and sample_available,'mode':'local','dialect':'sqlite','metadata':'sqlite','optional':True,'bundled_dataset':(SAMPLE_DIR/'contoso_demo.sqlite3').is_file(),'official_dataset_installed':(SAMPLE_DIR/'contoso_official.sqlite3').is_file()},
+            {'id':'contoso','label':'Contoso sample (optional)','configured':self.s.enable_sample_execution and sample_available,'mode':'local','dialect':'sqlite','metadata':'sqlite','optional':True,'bundled_dataset':any(x['database']=='contoso_demo' for x in datasets),'official_dataset_installed':any(x['database']=='contoso_official' for x in datasets),'installed_datasets':datasets},
             {'id':'athena','label':'Amazon Athena + Glue Catalog','configured':bool(self.s.is_aws and self.s.athena_output),'mode':'native','dialect':'athena','metadata':'glue'},
             {'id':'postgres','label':'PostgreSQL / Aurora','configured':bool(self.s.postgres_url),'mode':'sqlalchemy','dialect':'postgresql','metadata':'information_schema'},
             {'id':'snowflake','label':'Snowflake','configured':bool(self.s.snowflake_url),'mode':'sqlalchemy','dialect':'snowflake','metadata':'information_schema'},
@@ -23,10 +24,14 @@ class DataSourceService:
     def discover(self,source_id,schemas=None):
         source_id=(source_id or '').strip().lower()
         if source_id=='contoso':
-            from app.services.contoso_sample_service import ContosoSampleService
-            sample=ContosoSampleService()
-            objs=[sample.table_details(t) for t in sample.table_names()]
-            return {'source_id':'contoso','objects':objs,'count':len(objs),'scope':['contoso_demo'],'sample_rows_used':False}
+            from app.services.contoso_sample_service import ContosoSampleService,installed_datasets
+            names=schemas or (['contoso_demo'] if any(x['database']=='contoso_demo' for x in installed_datasets()) else [])
+            if not names:raise ValueError('Select an installed Contoso dataset explicitly')
+            sample=ContosoSampleService();objs=[]
+            for database in names:
+                sample.set_dataset(database)
+                objs.extend(sample.table_details(t,database) for t in sample.table_names())
+            return {'source_id':'contoso','objects':objs,'count':len(objs),'scope':names,'sample_rows_used':False}
         if source_id=='athena':
             if not schemas:raise ValueError('Select databases/tables in Data → Enterprise Catalog instead of scanning every database')
             if not self.s.is_aws or not self.s.athena_output: raise RuntimeError('Athena is not configured. Set APP_MODE=aws and ATHENA_OUTPUT.')
@@ -63,7 +68,7 @@ class DataSourceService:
         out=[]
         for item in self.sources():
             row={'id':item['id'],'configured':item['configured'],'status':'not_configured' if not item['configured'] else 'configured'}
-            if item['id']=='contoso':
+            if item['id']=='contoso' and item['configured']:
                 row['status']='healthy'
             elif item['id']=='athena' and item['configured']:
                 try: AwsAdapter().athena.list_work_groups(MaxResults=1); row['status']='healthy'
